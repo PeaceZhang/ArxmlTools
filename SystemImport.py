@@ -7,13 +7,16 @@ class SystemImport:
         wb = load_workbook(excelFiles, read_only=True, data_only=True)
         print(wb.sheetnames)
         datatypes_sheet = wb['DataTypes']
+        self.collect_datatypes(datatypes_sheet)
+
+    def collect_datatypes(self, worksheet):
         self.basetypelist = []
         self.enumtypelist = []
         self.structtypelist = []
         basetype = {}
         enumtype = {}
         structtype = {}
-        for row in datatypes_sheet:
+        for row in worksheet:
             if "Base Types" == row[2].value:
                 basetype['name'] = row[1].value
                 basetype['native declaration'] = row[3].value
@@ -22,11 +25,10 @@ class SystemImport:
             if "Enum" == row[2].value:
                 enumtype = \
                     {
-                        'name':  row[1].value,
+                        'name': row[1].value,
                         'value table': [],
                         'value': []
                     }
-                # self.enumtypelist.append(enumtype)
             if {} != enumtype:
                 if row[3].value is not None:
                     enumtype['value table'].append(row[3].value)
@@ -49,9 +51,10 @@ class SystemImport:
                     self.structtypelist.append(structtype)
                     structtype = {}
 
-        print(self.basetypelist)
-        print(self.enumtypelist)
-        print(self.structtypelist)
 
 if __name__ == '__main__':
-    SystemImport('Application.xlsx')
+    System = SystemImport('Application.xlsx')
+    print(System.basetypelist)
+    print(System.enumtypelist)
+    print(System.structtypelist)
+
