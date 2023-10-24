@@ -44,3 +44,4 @@ if __name__ == '__main__':
     System = SystemImport('Application.xlsx')
     ws = autosar.workspace('4.2.2')
     DataTypes(System, ws)
+

@@ -9,8 +9,34 @@ class SystemImport:
         print(wb.sheetnames)
         datatypes_sheet = wb['DataTypes']
         interfaces_sheet = wb['Interfaces']
+        component_sheet = wb['SWC_Composition']
         self.collect_datatypes(datatypes_sheet)
         self.collect_portinterfaces(interfaces_sheet)
+        self.collect_swcomponent(component_sheet)
+    def collect_swcomponent(self, worksheet):
+        self.swtopcomposition = worksheet['B4'].value
+        self.swcomponentlist = []
+        swcomponent = {}
+        for row in worksheet:
+            if row[2].value not in ['ComponentType', None]:
+                swcomponent = \
+                    {
+                        'swc name': row[1].value,
+                        'componenttype': '',
+                        'attributes': [],
+                        'provide port': [],
+                        'receive port': [],
+                        'defaultportaccess': [],
+                        'schedule': [],
+                        'interfaces': [],
+                        'receiver swc': []
+                    }
+            if {} != swcomponent:
+                if row[3].value is not None:
+                    swcomponent['attributes'].append(row[3].value)
+                else:
+                    self.swcomponentlist.append(swcomponent)
+                    swcomponent = {}
 
     def collect_portinterfaces(self, worksheet):
         self.interfaceslist = []
@@ -83,4 +109,6 @@ if __name__ == '__main__':
     # print(System.basetypelist)
     # print(System.enumtypelist)
     # print(System.structtypelist)
-    print(System.interfaceslist)
+    # print(System.interfaceslist)
+    print(System.swcomponentlist)
+
