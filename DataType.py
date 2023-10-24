@@ -2,8 +2,8 @@ from SystemImport import SystemImport
 import autosar
 
 class DataTypes:
-    def __init__(self, systemimport):
-        ws = autosar.workspace('4.2.2')
+    def __init__(self, systemimport, ws):
+        # ws = autosar.workspace('4.2.2')
         datatypes_package = ws.createPackage('DataTypes', role='DataType')
         datatypes_package.createSubPackage('BaseTypes')
         datatypes_package.createSubPackage('ImplementationTypes')
@@ -13,7 +13,7 @@ class DataTypes:
         self.definebasetype(systemimport, datatypes_package)
         self.defineenumtype(systemimport, datatypes_package)
         self.definestructtype(systemimport, datatypes_package)
-        ws.saveXML('Validation/Datatypes.arxml')
+        # ws.saveXML('Validation/Datatypes.arxml')
 
     def definebasetype(self, systemimport, package):
         basetypes = package.find('BaseTypes')
@@ -33,7 +33,7 @@ class DataTypes:
             )
 
     def definestructtype(self, systemimport, package):
-        print(systemimport.structtypelist)
+        #print(systemimport.structtypelist)
         implementationtypes = package.find('ImplementationTypes')
         for st in systemimport.structtypelist:
             eletyperef = [implementationtypes.find(x).ref for x in st['element type']]
@@ -42,4 +42,5 @@ class DataTypes:
 
 if __name__ == '__main__':
     System = SystemImport('Application.xlsx')
-    DataTypes(System)
+    ws = autosar.workspace('4.2.2')
+    DataTypes(System, ws)
