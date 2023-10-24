@@ -2,9 +2,10 @@ import copy
 
 from openpyxl import load_workbook
 
+
 class SystemImport:
-    def __init__(self, excelFiles):
-        wb = load_workbook(excelFiles, read_only=True, data_only=True)
+    def __init__(self, excelfiles):
+        wb = load_workbook(excelfiles, read_only=True, data_only=True)
         print(wb.sheetnames)
         datatypes_sheet = wb['DataTypes']
         self.collect_datatypes(datatypes_sheet)
@@ -19,7 +20,8 @@ class SystemImport:
         for row in worksheet:
             if "Base Types" == row[2].value:
                 basetype['name'] = row[1].value
-                basetype['native declaration'] = row[3].value
+                basetype['bit size'] = row[3].value
+                basetype['native declaration'] = row[4].value
                 self.basetypelist.append(basetype)
                 basetype = {}
             if "Enum" == row[2].value:

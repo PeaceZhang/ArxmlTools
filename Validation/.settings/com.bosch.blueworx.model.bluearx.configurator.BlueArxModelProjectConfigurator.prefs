@@ -1,0 +1,3 @@
+eclipse.preferences.version=1
+profileForBatchMode=com.bosch.autosartool.asw.validationx.bworx.common.profiles.autosarAATBSWMDTProfile;com.bosch.autosartool.bsw.validationx.bworx.common.profiles.paramdefMergeProfile;com.bosch.autosartool.asw.validationx.bworx.common.profiles.autosarAATDextProfile;com.bosch.autosartool.asw.validationx.bworx.common.profiles.autosarAATGeneralProfile;com.bosch.autosartool.asw.validationx.bworx.common.profiles.autosarAATSoftwareProfile;com.bosch.autosartool.asw.validationx.bworx.common.profiles.autosarAATSystemProfile;com.bosch.autosartool.asw.validationx.bworx.common.profiles.autosarAATBSWProfile;com.bosch.autosartool.asw.validationx.bworx.common.profiles.autosarAATECUProfile
+validateProject=true
