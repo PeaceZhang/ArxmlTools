@@ -22,7 +22,7 @@ class SystemImport:
                 swcomponent = \
                     {
                         'swc name': row[1].value,
-                        'componenttype': '',
+                        'componenttype': [],
                         'attributes': [],
                         'provide port': [],
                         'receive port': [],
@@ -33,7 +33,14 @@ class SystemImport:
                     }
             if {} != swcomponent:
                 if row[3].value is not None:
+                    swcomponent['componenttype'].append(row[2].value)
                     swcomponent['attributes'].append(row[3].value)
+                    swcomponent['provide port'].append(row[4].value)
+                    swcomponent['receive port'].append(row[5].value)
+                    swcomponent['defaultportaccess'].append(row[6].value)
+                    swcomponent['schedule'].append(row[7].value)
+                    swcomponent['interfaces'].append(row[8].value)
+                    swcomponent['receiver swc'].append(row[9].value)
                 else:
                     self.swcomponentlist.append(swcomponent)
                     swcomponent = {}
