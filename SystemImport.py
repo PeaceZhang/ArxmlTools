@@ -6,7 +6,7 @@ from openpyxl import load_workbook
 class SystemImport:
     def __init__(self, excelfiles):
         wb = load_workbook(excelfiles, read_only=True, data_only=True)
-        print(wb.sheetnames)
+        # print(wb.sheetnames)
         datatypes_sheet = wb['DataTypes']
         interfaces_sheet = wb['Interfaces']
         component_sheet = wb['SWC_Composition']
@@ -29,8 +29,8 @@ class SystemImport:
                     # swcomponent['componenttype'].append(row[2].value)
                     attribute = {}
                     attribute['attributes'] = row[3].value
-                    attribute['provide port'] = row[4].value
-                    attribute['receive port'] = row[5].value
+                    attribute['portname'] = row[4].value
+                    attribute['direction'] = row[5].value
                     attribute['defaultportaccess'] = row[6].value
                     attribute['schedule'] = row[7].value
                     attribute['interfaces'] = row[8].value
