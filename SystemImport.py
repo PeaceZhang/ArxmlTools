@@ -14,7 +14,6 @@ class SystemImport:
         self.collect_portinterfaces(interfaces_sheet)
         self.collect_swcomponent(component_sheet)
     def collect_swcomponent(self, worksheet):
-        self.swtopcomposition = worksheet['B4'].value
         self.swcomponentlist = []
         swcomponent = {}
         for row in worksheet:
@@ -22,25 +21,23 @@ class SystemImport:
                 swcomponent = \
                     {
                         'swc name': row[1].value,
-                        'componenttype': [],
-                        'attributes': [],
-                        'provide port': [],
-                        'receive port': [],
-                        'defaultportaccess': [],
-                        'schedule': [],
-                        'interfaces': [],
-                        'receiver swc': []
+                        'componenttype': row[2].value,
+                        'elements': []
                     }
             if {} != swcomponent:
                 if row[3].value is not None:
-                    swcomponent['componenttype'].append(row[2].value)
-                    swcomponent['attributes'].append(row[3].value)
-                    swcomponent['provide port'].append(row[4].value)
-                    swcomponent['receive port'].append(row[5].value)
-                    swcomponent['defaultportaccess'].append(row[6].value)
-                    swcomponent['schedule'].append(row[7].value)
-                    swcomponent['interfaces'].append(row[8].value)
-                    swcomponent['receiver swc'].append(row[9].value)
+                    # swcomponent['componenttype'].append(row[2].value)
+                    attribute = {}
+                    attribute['attributes'] = row[3].value
+                    attribute['provide port'] = row[4].value
+                    attribute['receive port'] = row[5].value
+                    attribute['defaultportaccess'] = row[6].value
+                    attribute['schedule'] = row[7].value
+                    attribute['interfaces'] = row[8].value
+                    attribute['receiver swc'] = row[9].value
+                    if None != row[9].value:
+                        attribute['receiver swc'] = [x.strip() for x in row[9].value.strip().split(",")]
+                    swcomponent['elements'].append(attribute)
                 else:
                     self.swcomponentlist.append(swcomponent)
                     swcomponent = {}
@@ -118,4 +115,5 @@ if __name__ == '__main__':
     # print(System.structtypelist)
     # print(System.interfaceslist)
     print(System.swcomponentlist)
+
 
