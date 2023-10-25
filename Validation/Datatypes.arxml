@@ -654,6 +654,17 @@
           </COMPONENTS>
           <CONNECTORS>
             <ASSEMBLY-SW-CONNECTOR>
+              <SHORT-NAME>SWC1_P_VehicleConditions_SWC2_P_VehicleConditions</SHORT-NAME>
+              <PROVIDER-IREF>
+                <CONTEXT-COMPONENT-REF DEST="SW-COMPONENT-PROTOTYPE">/ComponentTypes/ToplevelComposition/SWC1</CONTEXT-COMPONENT-REF>
+                <TARGET-P-PORT-REF DEST="P-PORT-PROTOTYPE">/ComponentTypes/SWC1/P_VehicleConditions</TARGET-P-PORT-REF>
+              </PROVIDER-IREF>
+              <REQUESTER-IREF>
+                <CONTEXT-COMPONENT-REF DEST="SW-COMPONENT-PROTOTYPE">/ComponentTypes/ToplevelComposition/SWC2</CONTEXT-COMPONENT-REF>
+                <TARGET-R-PORT-REF DEST="R-PORT-PROTOTYPE">/ComponentTypes/SWC2/P_VehicleConditions</TARGET-R-PORT-REF>
+              </REQUESTER-IREF>
+            </ASSEMBLY-SW-CONNECTOR>
+            <ASSEMBLY-SW-CONNECTOR>
               <SHORT-NAME>SWC1_P_MotorErrF_SWC2_P_MotorErrF</SHORT-NAME>
               <PROVIDER-IREF>
                 <CONTEXT-COMPONENT-REF DEST="SW-COMPONENT-PROTOTYPE">/ComponentTypes/ToplevelComposition/SWC1</CONTEXT-COMPONENT-REF>
@@ -709,17 +720,6 @@
               </REQUESTER-IREF>
             </ASSEMBLY-SW-CONNECTOR>
             <ASSEMBLY-SW-CONNECTOR>
-              <SHORT-NAME>SW_Composition1_P_SC_SWC1_P_SC</SHORT-NAME>
-              <PROVIDER-IREF>
-                <CONTEXT-COMPONENT-REF DEST="SW-COMPONENT-PROTOTYPE">/ComponentTypes/ToplevelComposition/SW_Composition1</CONTEXT-COMPONENT-REF>
-                <TARGET-P-PORT-REF DEST="P-PORT-PROTOTYPE">/ComponentTypes/SW_Composition1/P_SC</TARGET-P-PORT-REF>
-              </PROVIDER-IREF>
-              <REQUESTER-IREF>
-                <CONTEXT-COMPONENT-REF DEST="SW-COMPONENT-PROTOTYPE">/ComponentTypes/ToplevelComposition/SWC1</CONTEXT-COMPONENT-REF>
-                <TARGET-R-PORT-REF DEST="R-PORT-PROTOTYPE">/ComponentTypes/SWC1/P_SC</TARGET-R-PORT-REF>
-              </REQUESTER-IREF>
-            </ASSEMBLY-SW-CONNECTOR>
-            <ASSEMBLY-SW-CONNECTOR>
               <SHORT-NAME>SW_Composition1_P_SC_SWC2_P_SC</SHORT-NAME>
               <PROVIDER-IREF>
                 <CONTEXT-COMPONENT-REF DEST="SW-COMPONENT-PROTOTYPE">/ComponentTypes/ToplevelComposition/SW_Composition1</CONTEXT-COMPONENT-REF>
@@ -731,26 +731,16 @@
               </REQUESTER-IREF>
             </ASSEMBLY-SW-CONNECTOR>
             <ASSEMBLY-SW-CONNECTOR>
-              <SHORT-NAME>SWC1_P_VehicleConditions_SWC2_P_VehicleConditions</SHORT-NAME>
+              <SHORT-NAME>SW_Composition1_P_SC_SWC1_P_SC</SHORT-NAME>
               <PROVIDER-IREF>
-                <CONTEXT-COMPONENT-REF DEST="SW-COMPONENT-PROTOTYPE">/ComponentTypes/ToplevelComposition/SWC1</CONTEXT-COMPONENT-REF>
-                <TARGET-P-PORT-REF DEST="P-PORT-PROTOTYPE">/ComponentTypes/SWC1/P_VehicleConditions</TARGET-P-PORT-REF>
+                <CONTEXT-COMPONENT-REF DEST="SW-COMPONENT-PROTOTYPE">/ComponentTypes/ToplevelComposition/SW_Composition1</CONTEXT-COMPONENT-REF>
+                <TARGET-P-PORT-REF DEST="P-PORT-PROTOTYPE">/ComponentTypes/SW_Composition1/P_SC</TARGET-P-PORT-REF>
               </PROVIDER-IREF>
               <REQUESTER-IREF>
-                <CONTEXT-COMPONENT-REF DEST="SW-COMPONENT-PROTOTYPE">/ComponentTypes/ToplevelComposition/SWC2</CONTEXT-COMPONENT-REF>
-                <TARGET-R-PORT-REF DEST="R-PORT-PROTOTYPE">/ComponentTypes/SWC2/P_VehicleConditions</TARGET-R-PORT-REF>
+                <CONTEXT-COMPONENT-REF DEST="SW-COMPONENT-PROTOTYPE">/ComponentTypes/ToplevelComposition/SWC1</CONTEXT-COMPONENT-REF>
+                <TARGET-R-PORT-REF DEST="R-PORT-PROTOTYPE">/ComponentTypes/SWC1/P_SC</TARGET-R-PORT-REF>
               </REQUESTER-IREF>
             </ASSEMBLY-SW-CONNECTOR>
-            <DELEGATION-SW-CONNECTOR>
-              <SHORT-NAME>SWC1_P_MotorErrR_P_MotorErrR</SHORT-NAME>
-              <INNER-PORT-IREF>
-                <P-PORT-IN-COMPOSITION-INSTANCE-REF>
-                  <CONTEXT-COMPONENT-REF DEST="SW-COMPONENT-PROTOTYPE">/ComponentTypes/ToplevelComposition/SWC1</CONTEXT-COMPONENT-REF>
-                  <TARGET-P-PORT-REF DEST="P-PORT-PROTOTYPE">/ComponentTypes/SWC1/P_MotorErrR</TARGET-P-PORT-REF>
-                </P-PORT-IN-COMPOSITION-INSTANCE-REF>
-              </INNER-PORT-IREF>
-              <OUTER-PORT-REF DEST="P-PORT-PROTOTYPE">/ComponentTypes/ToplevelComposition/P_MotorErrR</OUTER-PORT-REF>
-            </DELEGATION-SW-CONNECTOR>
             <DELEGATION-SW-CONNECTOR>
               <SHORT-NAME>SWC1_P_VehicleConditions_P_VehicleConditions</SHORT-NAME>
               <INNER-PORT-IREF>
@@ -760,6 +750,16 @@
                 </P-PORT-IN-COMPOSITION-INSTANCE-REF>
               </INNER-PORT-IREF>
               <OUTER-PORT-REF DEST="P-PORT-PROTOTYPE">/ComponentTypes/ToplevelComposition/P_VehicleConditions</OUTER-PORT-REF>
+            </DELEGATION-SW-CONNECTOR>
+            <DELEGATION-SW-CONNECTOR>
+              <SHORT-NAME>SWC1_P_MotorErrR_P_MotorErrR</SHORT-NAME>
+              <INNER-PORT-IREF>
+                <P-PORT-IN-COMPOSITION-INSTANCE-REF>
+                  <CONTEXT-COMPONENT-REF DEST="SW-COMPONENT-PROTOTYPE">/ComponentTypes/ToplevelComposition/SWC1</CONTEXT-COMPONENT-REF>
+                  <TARGET-P-PORT-REF DEST="P-PORT-PROTOTYPE">/ComponentTypes/SWC1/P_MotorErrR</TARGET-P-PORT-REF>
+                </P-PORT-IN-COMPOSITION-INSTANCE-REF>
+              </INNER-PORT-IREF>
+              <OUTER-PORT-REF DEST="P-PORT-PROTOTYPE">/ComponentTypes/ToplevelComposition/P_MotorErrR</OUTER-PORT-REF>
             </DELEGATION-SW-CONNECTOR>
             <DELEGATION-SW-CONNECTOR>
               <SHORT-NAME>R_VehicleMode_SWC1_R_VehicleMode</SHORT-NAME>

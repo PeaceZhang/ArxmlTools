@@ -32,21 +32,31 @@ class Components:
         for y in self.childcomposition.values():
             self.fathercomposition.createComponentPrototype(y.ref)
 
-        # print(self.childcomposition)
-
         for swc in syscomponents:
             # print(swc)
             for ele in swc['elements']:
                 if None != ele['receiver swc']:
                     for rsl in ele['receiver swc']:
                         if rsl in self.childcomponent:
-                            self.childcomponent[rsl].createRequirePort(ele['portname'], ws.findRolePackage('PortInterface').find(ele['interfaces']).ref)
+                            port = self.childcomponent[rsl].createRequirePort(ele['portname'], ws.findRolePackage('PortInterface').find(ele['interfaces']).ref)
+                            if 'DELEGATION' == swc['componenttype']:
+                                self.fathercomposition.createConnector(ele['portname'], port.ref)
+                            else:
+                                self.fathercomposition.createConnector(swcomponentpackage.ref + '/' + swc['swc name'] + '/' + ele['portname'], port.ref)
                         if rsl in self.childcomposition:
-                            self.childcomposition[rsl].createRequirePort(ele['portname'],ws.findRolePackage('PortInterface').find(ele['interfaces']).ref)
+                            port = self.childcomposition[rsl].createRequirePort(ele['portname'],ws.findRolePackage('PortInterface').find(ele['interfaces']).ref)
+                            if 'DELEGATION' == swc['componenttype']:
+                                self.fathercomposition.createConnector(ele['portname'], port.ref)
+                            else:
+                                self.fathercomposition.createConnector(swcomponentpackage.ref + '/' + swc['swc name'] + '/' + ele['portname'], port.ref)
                         if 'Delegation' == rsl:
-                            self.fathercomposition.createProvidePort(ele['portname'], ws.findRolePackage('PortInterface').find(ele['interfaces']).ref)
-                            # print(self.childcomposition[rsl])
-        self.fathercomposition.autoConnect()
+                            port = self.fathercomposition.createProvidePort(ele['portname'], ws.findRolePackage('PortInterface').find(ele['interfaces']).ref)
+                            self.fathercomposition.createConnector(swcomponentpackage.ref + '/' + swc['swc name'] + '/' + ele['portname'], ele['portname'])
+        # self.fathercomposition.autoConnect()
+        # self.fathercomposition.createConnector("/ComponentTypes/SWC2/P_VehicleConditions", "/ComponentTypes/SWC1/P_VehicleConditions")
+        # self.fathercomposition.createConnector("R_VehicleMode",
+        #                                        "/ComponentTypes/SWC1/R_VehicleMode")
+
 if __name__ == '__main__':
     System = SystemImport('Application.xlsx')
     ws = autosar.workspace('4.2.2')
