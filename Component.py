@@ -2,6 +2,7 @@ from SystemImport import SystemImport
 from PortInterface import PortInterfaces
 from DataType import DataTypes
 import autosar
+import re
 
 class Components:
     def __init__(self, syscomponents, ws):
@@ -9,6 +10,7 @@ class Components:
         self.childcomponent = {}
         self.childcomposition = {}
         self.fathercomposition = None
+
         for swc in syscomponents:
             # print(swc)
             if 'APP-SWC' == swc['componenttype']:
@@ -36,26 +38,41 @@ class Components:
             # print(swc)
             for ele in swc['elements']:
                 if None != ele['receiver swc']:
-                    for rsl in ele['receiver swc']:
-                        if rsl in self.childcomponent:
-                            port = self.childcomponent[rsl].createRequirePort(ele['portname'], ws.findRolePackage('PortInterface').find(ele['interfaces']).ref)
+                    for rswc in ele['receiver swc']:
+                        if rswc in self.childcomponent:
+                            port = self.childcomponent[rswc].createRequirePort(ele['portname'].replace('P_','R_'), ws.findRolePackage('PortInterface').find(ele['interfaces']).ref)
                             if 'DELEGATION' == swc['componenttype']:
                                 self.fathercomposition.createConnector(ele['portname'], port.ref)
                             else:
                                 self.fathercomposition.createConnector(swcomponentpackage.ref + '/' + swc['swc name'] + '/' + ele['portname'], port.ref)
-                        if rsl in self.childcomposition:
-                            port = self.childcomposition[rsl].createRequirePort(ele['portname'],ws.findRolePackage('PortInterface').find(ele['interfaces']).ref)
+                        if rswc in self.childcomposition:
+                            port = self.childcomposition[rswc].createRequirePort(ele['portname'].replace('P_','R_') ,ws.findRolePackage('PortInterface').find(ele['interfaces']).ref)
                             if 'DELEGATION' == swc['componenttype']:
                                 self.fathercomposition.createConnector(ele['portname'], port.ref)
                             else:
                                 self.fathercomposition.createConnector(swcomponentpackage.ref + '/' + swc['swc name'] + '/' + ele['portname'], port.ref)
-                        if 'Delegation' == rsl:
+                        if 'Delegation' == rswc:
                             port = self.fathercomposition.createProvidePort(ele['portname'], ws.findRolePackage('PortInterface').find(ele['interfaces']).ref)
                             self.fathercomposition.createConnector(swcomponentpackage.ref + '/' + swc['swc name'] + '/' + ele['portname'], ele['portname'])
-        # self.fathercomposition.autoConnect()
-        # self.fathercomposition.createConnector("/ComponentTypes/SWC2/P_VehicleConditions", "/ComponentTypes/SWC1/P_VehicleConditions")
-        # self.fathercomposition.createConnector("R_VehicleMode",
-        #                                        "/ComponentTypes/SWC1/R_VehicleMode")
+
+        for swc in syscomponents:
+            for ele in swc['elements']:
+                if 'Task' == ele['attributes']:
+                    if 'INIT' == ele['schedule']:
+                        if 'Yes' == ele['defaultportaccess']:
+                            pass
+                        else:
+                            self.childcomponent[swc['swc name']].behavior.createRunnable(swc['swc name'] + '_' + ele['portname'])
+                            self.childcomponent[swc['swc name']].behavior.createInitEvent(swc['swc name'] + '_' + ele['portname'])
+                    else:
+                        if 'Yes' == ele['defaultportaccess']:
+                            print(ele['schedule'])
+                            print(int(re.findall(r'\d+', ele['schedule'])[0]))
+                            self.childcomponent[swc['swc name']].behavior.createRunnable(swc['swc name'] + '_' + ele['portname'])
+                            self.childcomponent[swc['swc name']].behavior.createTimerEvent(swc['swc name'] + '_' + ele['portname'], int(re.findall(r'\d+', ele['schedule'])[0]))
+
+        # print(self.fathercomposition.requirePorts[0].name)
+        # print(self.fathercomposition.providePorts[0].name)
 
 if __name__ == '__main__':
     System = SystemImport('Application.xlsx')
