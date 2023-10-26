@@ -56,23 +56,33 @@ class Components:
                             self.fathercomposition.createConnector(swcomponentpackage.ref + '/' + swc['swc name'] + '/' + ele['portname'], ele['portname'])
 
         for swc in syscomponents:
+            portinterfaces = ws.findRolePackage('PortInterface')
             for ele in swc['elements']:
                 if 'Task' == ele['attributes']:
                     if 'INIT' == ele['schedule']:
                         if 'Yes' == ele['defaultportaccess']:
-                            pass
+                            portAccessList = self.findportaccesstable(swc['swc name'], portinterfaces)
+                            self.childcomponent[swc['swc name']].behavior.createRunnable(swc['swc name'] + '_' + ele['portname'], portAccess=portAccessList)
+                            self.childcomponent[swc['swc name']].behavior.createInitEvent(swc['swc name'] + '_' + ele['portname'])
                         else:
                             self.childcomponent[swc['swc name']].behavior.createRunnable(swc['swc name'] + '_' + ele['portname'])
                             self.childcomponent[swc['swc name']].behavior.createInitEvent(swc['swc name'] + '_' + ele['portname'])
                     else:
                         if 'Yes' == ele['defaultportaccess']:
-                            print(ele['schedule'])
-                            print(int(re.findall(r'\d+', ele['schedule'])[0]))
+                            portAccessList = self.findportaccesstable(swc['swc name'], portinterfaces)
+                            self.childcomponent[swc['swc name']].behavior.createRunnable(swc['swc name'] + '_' + ele['portname'], portAccess=portAccessList)
+                            self.childcomponent[swc['swc name']].behavior.createTimerEvent(swc['swc name'] + '_' + ele['portname'], int(re.findall(r'\d+', ele['schedule'])[0]))
+                        else:
                             self.childcomponent[swc['swc name']].behavior.createRunnable(swc['swc name'] + '_' + ele['portname'])
                             self.childcomponent[swc['swc name']].behavior.createTimerEvent(swc['swc name'] + '_' + ele['portname'], int(re.findall(r'\d+', ele['schedule'])[0]))
-
-        # print(self.fathercomposition.requirePorts[0].name)
-        # print(self.fathercomposition.providePorts[0].name)
+    def findportaccesstable(self, swcname, pipackage):
+        portAccessList = []
+        swcports = self.childcomponent[swcname].requirePorts + self.childcomponent[swcname].providePorts
+        for port in swcports:
+            portelements = [x.name for x in pipackage.find(port.portInterfaceRef).dataElements]
+            for ele in portelements:
+                portAccessList.append(port.name + "/" + ele)
+        return portAccessList
 
 if __name__ == '__main__':
     System = SystemImport('Application.xlsx')
