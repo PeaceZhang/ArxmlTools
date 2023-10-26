@@ -1,4 +1,4 @@
-from SystemImport import SystemImport
+from Src.SystemImport import SystemImport
 import autosar
 
 class DataTypes:
@@ -41,7 +41,7 @@ class DataTypes:
             implementationtypes.createImplementationRecordDataType(st['name'], elements)
 
 if __name__ == '__main__':
-    System = SystemImport('Application.xlsx')
+    System = SystemImport('../Import/Application.xlsx')
     ws = autosar.workspace('4.2.2')
     DataTypes(System, ws)
 

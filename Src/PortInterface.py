@@ -1,5 +1,5 @@
-from SystemImport import SystemImport
-from DataType import DataTypes
+from Src.SystemImport import SystemImport
+from Src.DataType import DataTypes
 import autosar
 
 class PortInterfaces:
@@ -13,8 +13,8 @@ class PortInterfaces:
             )
 
 if __name__ == '__main__':
-    System = SystemImport('Application.xlsx')
+    System = SystemImport('../Import/Application.xlsx')
     ws = autosar.workspace('4.2.2')
     DataTypes(System, ws)
     PortInterfaces(System.interfaceslist, ws)
-    ws.saveXML('Validation/Datatypes.arxml')
+    ws.saveXML('../Export/Datatypes.arxml')

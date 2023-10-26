@@ -1,5 +1,4 @@
 import copy
-
 from openpyxl import load_workbook
 
 
@@ -109,7 +108,7 @@ class SystemImport:
 
 
 if __name__ == '__main__':
-    System = SystemImport('Application.xlsx')
+    System = SystemImport('../Import/Application.xlsx')
     # print(System.basetypelist)
     # print(System.enumtypelist)
     # print(System.structtypelist)

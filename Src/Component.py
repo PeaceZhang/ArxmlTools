@@ -1,6 +1,6 @@
-from SystemImport import SystemImport
-from PortInterface import PortInterfaces
-from DataType import DataTypes
+from Src.SystemImport import SystemImport
+from Src.PortInterface import PortInterfaces
+from Src.DataType import DataTypes
 import autosar
 import re
 
