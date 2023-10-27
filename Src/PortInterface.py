@@ -17,4 +17,4 @@ if __name__ == '__main__':
     ws = autosar.workspace('4.2.2')
     DataTypes(System, ws)
     PortInterfaces(System.interfaceslist, ws)
-    ws.saveXML('../Export/Datatypes.arxml')
+    ws.saveXML('../Export/Application.arxml')
