@@ -65,9 +65,11 @@ class SystemImport:
 
     def collect_datatypes(self, worksheet):
         self.basetypelist = []
+        self.aliastypelist = []
         self.enumtypelist = []
         self.structtypelist = []
         basetype = {}
+        aliastype = {}
         enumtype = {}
         structtype = {}
         for row in worksheet:
@@ -77,6 +79,16 @@ class SystemImport:
                 basetype['native declaration'] = row[4].value
                 self.basetypelist.append(basetype)
                 basetype = {}
+            if "Alias" == row[2].value:
+                aliastype['name'] = row[1].value
+                aliastype['reference type'] = row[3].value
+                aliastype['scaling'] = row[4].value
+                aliastype['offset'] = row[5].value
+                aliastype['minvalue'] = row[6].value
+                aliastype['maxvalue'] = row[7].value
+                aliastype['unit'] = row[8].value
+                self.aliastypelist.append(aliastype)
+                aliastype = {}
             if "Enum" == row[2].value:
                 enumtype = \
                     {
@@ -113,6 +125,7 @@ if __name__ == '__main__':
     # print(System.enumtypelist)
     # print(System.structtypelist)
     # print(System.interfaceslist)
-    print(System.swcomponentlist)
+    # print(System.swcomponentlist)
+    print(System.aliastypelist)
 
 
