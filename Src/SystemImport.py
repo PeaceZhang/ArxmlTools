@@ -43,7 +43,11 @@ class SystemImport:
 
     def collect_portinterfaces(self, worksheet):
         self.interfaceslist = []
+        self.csinterfaceslist = []
         interface = {}
+        csinterface = {}
+        operation = {}
+        argument = []
         for row in worksheet:
             # print(row[1].value)
             if "S/R" == row[2].value:
@@ -62,6 +66,41 @@ class SystemImport:
                 else:
                     self.interfaceslist.append(interface)
                     interface = {}
+
+            if "C/S" == row[2].value:
+                csinterface = \
+                    {
+                        'name': row[1].value,
+                        'type': row[2].value,
+                        'operations': []
+                    }
+            if {} != csinterface:
+                if None != row[3].value or None != row[5].value:
+                    if None != row[3].value:
+                        if {} != operation:
+                            csinterface['operations'].append(operation)
+                            operation = {}
+                        # create new operation
+                        operation = \
+                        {
+                            'operation name': row[3].value,
+                            'returnvaluetype': row[4].value,
+                            'arguments': []
+                        }
+                    if None != row[5].value:
+                        argument = \
+                            {
+                                'argument name': row[5].value,
+                                'argstype': row[6].value,
+                                'direction': row[7].value
+                            }
+                        operation['arguments'].append(argument)
+                else:
+                    csinterface['operations'].append(operation)
+                    self.csinterfaceslist.append(csinterface)
+                    csinterface = {}
+                    operation = {}
+                    argument = []
 
     def collect_datatypes(self, worksheet):
         self.basetypelist = []
@@ -126,6 +165,6 @@ if __name__ == '__main__':
     # print(System.structtypelist)
     # print(System.interfaceslist)
     # print(System.swcomponentlist)
-    print(System.aliastypelist)
-
+    # print(System.aliastypelist)
+    print(System.csinterfaceslist)
 
