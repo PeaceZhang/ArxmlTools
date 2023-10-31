@@ -9,10 +9,13 @@ class DataTypes:
         datatypes_package.createSubPackage('ImplementationTypes')
         datatypes_package.createSubPackage('CompuMethods', role='CompuMethod')
         datatypes_package.createSubPackage('DataConstrs', role='DataConstraint')
+        datatypes_package.createSubPackage('Units', role='Unit')
 
         self.definebasetype(systemimport, datatypes_package)
+        self.definealiastype(systemimport, datatypes_package)
         self.defineenumtype(systemimport, datatypes_package)
         self.definestructtype(systemimport, datatypes_package)
+
         # ws.saveXML('Validation/Datatypes.arxml')
 
     def definebasetype(self, systemimport, package):
@@ -21,6 +24,19 @@ class DataTypes:
         for bt in systemimport.basetypelist:
             definedbasetypes = basetypes.createSwBaseType(bt['name'], size=bt['bit size'], nativeDeclaration=bt['native declaration'])
             implementationtypes.createImplementationDataType(bt['name'], definedbasetypes.ref)
+
+    def definealiastype(self, systemimport, package):
+        implementationtypes = package.find('ImplementationTypes')
+        for at in systemimport.aliastypelist:
+            implementationtypes.createImplementationDataTypeRef(
+                at['name'],
+                implementationtypes.find(at['reference type']).ref,
+                lowerLimit=at['minvalue'],
+                upperLimit=at['maxvalue'],
+                offset=at['offset'],
+                scaling=at['scaling'],
+                unit=at['unit']
+            )
 
     def defineenumtype(self, systemimport, package):
         for et in systemimport.enumtypelist:
@@ -44,4 +60,5 @@ if __name__ == '__main__':
     System = SystemImport('../Import/Application.xlsx')
     ws = autosar.workspace('4.2.2')
     DataTypes(System, ws)
+    ws.saveXML('../Export/Application.arxml')
 

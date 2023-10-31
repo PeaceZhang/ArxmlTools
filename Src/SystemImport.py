@@ -43,7 +43,11 @@ class SystemImport:
 
     def collect_portinterfaces(self, worksheet):
         self.interfaceslist = []
+        self.csinterfaceslist = []
         interface = {}
+        csinterface = {}
+        operation = {}
+        argument = []
         for row in worksheet:
             # print(row[1].value)
             if "S/R" == row[2].value:
@@ -63,20 +67,75 @@ class SystemImport:
                     self.interfaceslist.append(interface)
                     interface = {}
 
+            # collect cs interfaces list
+            if "C/S" == row[2].value:
+                csinterface = \
+                    {
+                        'name': row[1].value,
+                        'type': row[2].value,
+                        'application error': row[3].value,
+                        'operations': []
+                    }
+            if {} != csinterface:
+                if None != row[4].value or None != row[5].value:
+                    if None != row[4].value:
+                        if {} != operation:
+                            csinterface['operations'].append(operation)
+                            operation = {}
+                        # create new operation
+                        operation = \
+                        {
+                            'operation name': row[4].value,
+                            'arguments': []
+                        }
+                    if None != row[5].value:
+                        argument = \
+                            {
+                                'argument name': row[5].value,
+                                'argstype': row[6].value,
+                                'direction': row[7].value
+                            }
+                        operation['arguments'].append(argument)
+                else:
+                    csinterface['operations'].append(operation)
+                    self.csinterfaceslist.append(csinterface)
+                    csinterface = {}
+                    operation = {}
+                    argument = []
+
     def collect_datatypes(self, worksheet):
         self.basetypelist = []
+        self.aliastypelist = []
         self.enumtypelist = []
+        self.enumaetypelist = []
         self.structtypelist = []
         basetype = {}
+        aliastype = {}
         enumtype = {}
+        enumaetype = {}
         structtype = {}
         for row in worksheet:
+            # collect base type list
             if "Base Types" == row[2].value:
                 basetype['name'] = row[1].value
                 basetype['bit size'] = row[3].value
                 basetype['native declaration'] = row[4].value
                 self.basetypelist.append(basetype)
                 basetype = {}
+
+            # collect alias type list
+            if "Alias" == row[2].value:
+                aliastype['name'] = row[1].value
+                aliastype['reference type'] = row[3].value
+                aliastype['scaling'] = row[4].value
+                aliastype['offset'] = row[5].value
+                aliastype['minvalue'] = row[6].value
+                aliastype['maxvalue'] = row[7].value
+                aliastype['unit'] = row[8].value
+                self.aliastypelist.append(aliastype)
+                aliastype = {}
+
+            # collect enum type list
             if "Enum" == row[2].value:
                 enumtype = \
                     {
@@ -91,6 +150,24 @@ class SystemImport:
                 else:
                     self.enumtypelist.append(enumtype)
                     enumtype = {}
+
+            # collect application possible error list
+            if "EnumAppError" == row[2].value:
+                enumaetype = \
+                    {
+                        'name': row[1].value,
+                        'value table': [],
+                        'value': []
+                    }
+            if {} != enumaetype:
+                if row[3].value is not None:
+                    enumaetype['value table'].append(row[3].value)
+                    enumaetype['value'].append(row[4].value)
+                else:
+                    self.enumaetypelist.append(enumaetype)
+                    enumaetype = {}
+
+            # collect struct type list
             if "Struct" == row[2].value:
                 structtype = \
                     {
@@ -111,8 +188,10 @@ if __name__ == '__main__':
     System = SystemImport('../Import/Application.xlsx')
     # print(System.basetypelist)
     # print(System.enumtypelist)
+    # print(System.enumaetypelist)
     # print(System.structtypelist)
     # print(System.interfaceslist)
-    print(System.swcomponentlist)
-
+    # print(System.swcomponentlist)
+    # print(System.aliastypelist)
+    print(System.csinterfaceslist)
 
