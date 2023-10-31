@@ -28,7 +28,14 @@ class Components:
                         swc1.createProvidePort(ele['portname'], ws.findRolePackage('PortInterface').find(ele['interfaces']).ref)
                     if 'Receiver' == ele['direction']:
                         swc1.createRequirePort(ele['portname'], ws.findRolePackage('PortInterface').find(ele['interfaces']).ref)
-
+                    if 'Server' == ele['direction']:
+                        swc1.createProvidePort(ele['portname'], ws.findRolePackage('PortInterface').find(ele['interfaces']).ref)
+                        if 'APP-SWC' == swc['componenttype']:
+                            for op in ws.findRolePackage('PortInterface').find(ele['interfaces']).operations:
+                                swc1.behavior.createRunnable(ele['portname'] + "_" + op.name)
+                                swc1.behavior.createOperationInvokedEvent(ele['portname'] + "_" + op.name, ele['portname'] + "/" + op.name)
+                    if 'Client' == ele['direction']:
+                        swc1.createRequirePort(ele['portname'], ws.findRolePackage('PortInterface').find(ele['interfaces']).ref)
         for x in self.childcomponent.values():
             self.fathercomposition.createComponentPrototype(x.ref)
         for y in self.childcomposition.values():
@@ -77,11 +84,24 @@ class Components:
                             self.childcomponent[swc['swc name']].behavior.createTimerEvent(swc['swc name'] + '_' + ele['portname'], int(re.findall(r'\d+', ele['schedule'])[0]))
     def findportaccesstable(self, swcname, pipackage):
         portAccessList = []
-        swcports = self.childcomponent[swcname].requirePorts + self.childcomponent[swcname].providePorts
+        swcports = self.childcomponent[swcname].requirePorts
         for port in swcports:
-            portelements = [x.name for x in pipackage.find(port.portInterfaceRef).dataElements]
-            for ele in portelements:
-                portAccessList.append(port.name + "/" + ele)
+            portref = pipackage.find(port.portInterfaceRef)
+            if isinstance(portref, autosar.portinterface.SenderReceiverInterface):
+                portelements = [x.name for x in portref.dataElements]
+                for ele in portelements:
+                    portAccessList.append(port.name + "/" + ele)
+            if isinstance(portref, autosar.portinterface.ClientServerInterface):
+                portelements = [x.name for x in portref.operations]
+                for ele in portelements:
+                    portAccessList.append(port.name + "/" + ele)
+        swcports = self.childcomponent[swcname].providePorts
+        for port in swcports:
+            portref = pipackage.find(port.portInterfaceRef)
+            if isinstance(portref, autosar.portinterface.SenderReceiverInterface):
+                portelements = [x.name for x in portref.dataElements]
+                for ele in portelements:
+                    portAccessList.append(port.name + "/" + ele)
         return portAccessList
 
 if __name__ == '__main__':
