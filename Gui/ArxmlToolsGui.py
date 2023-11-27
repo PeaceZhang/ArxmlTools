@@ -5,7 +5,6 @@ from FileExplorer import FileExplorer
 from ModelExplorer import ModelExplorer
 import sys
 
-
 class MyMainWindow(QMainWindow):
     def __init__(self):
         super().__init__()

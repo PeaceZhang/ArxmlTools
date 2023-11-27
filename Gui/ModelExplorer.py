@@ -11,3 +11,6 @@ class ModelExplorer(QTreeWidget):
 
         # 添加子节点
         child_item = QTreeWidgetItem(root_item, ["Child", "Child Data"])
+        child1_item = QTreeWidgetItem(root_item, ["Child1", "Child Data1"])
+
+        grandson_item = QTreeWidgetItem(child_item, ["grandson1", "grandson1 data"])
