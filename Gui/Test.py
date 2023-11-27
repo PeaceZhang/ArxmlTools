@@ -1,40 +1,34 @@
-from PySide6.QtWidgets import QApplication, QMainWindow, QMessageBox
-from PySide6.QtGui import QAction, QIcon
+from PySide6.QtWidgets import QApplication, QMainWindow, QTreeWidget, QTreeWidgetItem
 import sys
 
 class MyMainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
 
-        # 创建一个版本信息动作
-        action_version = QAction("Version", self)
-        action_version.triggered.connect(self.show_version_dialog)
+        # 设置主窗口的默认大小
+        self.setGeometry(100, 100, 400, 300)
 
-        # 创建菜单栏
-        menu_bar = self.menuBar()
+        # 使用 QTreeWidget 显示树形数据
+        tree_widget = QTreeWidget(self)
+        tree_widget.setHeaderLabels(["Column 1", "Column 2"])
 
-        # 创建 "About" 菜单
-        about_menu = menu_bar.addMenu("About")
+        # 添加根节点
+        root_item = QTreeWidgetItem(tree_widget, ["Root", "Root Data"])
 
-        # 在 "About" 菜单下添加版本信息动作
-        about_menu.addAction(action_version)
+        # 添加子节点
+        child_item = QTreeWidgetItem(root_item, ["Child", "Child Data"])
 
-    def show_version_dialog(self):
-        # 显示版本信息对话框
-        version_text = "ArxmlTools V0010"
-        QMessageBox.information(self, "Version", version_text)
+        # 设置主窗口的中央部件为 QTreeWidget
+        self.setCentralWidget(tree_widget)
+
+        # 设置主窗口属性
+        self.setWindowTitle("QTreeWidget Example")
 
 def main():
     app = QApplication(sys.argv)
 
     # 创建主窗口对象
     main_window = MyMainWindow()
-
-    # 设置主窗口属性
-    main_window.setWindowTitle("ArxmlTools")
-    main_window.resize(800, 600)
-    ArxmlToolsIcon = QIcon("Icon/arxmltoolsicon.png")
-    main_window.setWindowIcon(ArxmlToolsIcon)
 
     # 显示主窗口
     main_window.show()
