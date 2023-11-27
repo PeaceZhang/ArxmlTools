@@ -26,14 +26,19 @@ class Ui_MainWindow(object):
         MainWindow.resize(800, 600)
         self.actionVersion = QAction(MainWindow)
         self.actionVersion.setObjectName(u"actionVersion")
+
         self.actionRecent_project = QAction(MainWindow)
         self.actionRecent_project.setObjectName(u"actionRecent_project")
+
         self.actionNew = QAction(MainWindow)
         self.actionNew.setObjectName(u"actionNew")
+
         self.actionNew_file = QAction(MainWindow)
         self.actionNew_file.setObjectName(u"actionNew_file")
+
         self.centralwidget = QWidget(MainWindow)
         self.centralwidget.setObjectName(u"centralwidget")
+
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QMenuBar(MainWindow)
         self.menubar.setObjectName(u"menubar")
