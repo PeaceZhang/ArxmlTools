@@ -21,11 +21,15 @@ from PySide6.QtWidgets import (QApplication, QMainWindow, QMenu, QMenuBar,
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
-        if not MainWindow.objectName():
-            MainWindow.setObjectName(u"MainWindow")
+        # set mian window's object name/default size/Icon
+        MainWindow.setObjectName(u"MainWindow")
         MainWindow.resize(800, 600)
-        self.actionVersion = QAction(MainWindow)
-        self.actionVersion.setObjectName(u"actionVersion")
+        ArxmlTooolsIcon = QIcon("Icon/arxmltoolsicon.png")
+        MainWindow.setWindowIcon(ArxmlTooolsIcon)
+
+        # set action for menu bar terminal items
+        self.actionMenubar_About_Version = QAction(MainWindow)
+        self.actionMenubar_About_Version.setObjectName(u"actionMenubar_About_Version")
 
         self.actionRecent_project = QAction(MainWindow)
         self.actionRecent_project.setObjectName(u"actionRecent_project")
@@ -38,8 +42,9 @@ class Ui_MainWindow(object):
 
         self.centralwidget = QWidget(MainWindow)
         self.centralwidget.setObjectName(u"centralwidget")
-
         MainWindow.setCentralWidget(self.centralwidget)
+
+
         self.menubar = QMenuBar(MainWindow)
         self.menubar.setObjectName(u"menubar")
         self.menubar.setGeometry(QRect(0, 0, 800, 21))
@@ -60,7 +65,7 @@ class Ui_MainWindow(object):
         self.menuFile.addAction(self.actionNew_file)
         self.menuOpen_Project.addAction(self.actionRecent_project)
         self.menuOpen_Project.addAction(self.actionNew)
-        self.menuAbout.addAction(self.actionVersion)
+        self.menuAbout.addAction(self.actionMenubar_About_Version)
 
         self.retranslateUi(MainWindow)
 
@@ -68,8 +73,8 @@ class Ui_MainWindow(object):
     # setupUi
 
     def retranslateUi(self, MainWindow):
-        MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"MainWindow", None))
-        self.actionVersion.setText(QCoreApplication.translate("MainWindow", u"Version", None))
+        MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"ArxmlTools", None))
+        self.actionMenubar_About_Version.setText(QCoreApplication.translate("MainWindow", u"Version", None))
         self.actionRecent_project.setText(QCoreApplication.translate("MainWindow", u"Recent project", None))
         self.actionNew.setText(QCoreApplication.translate("MainWindow", u"New project", None))
         self.actionNew_file.setText(QCoreApplication.translate("MainWindow", u"New file", None))
