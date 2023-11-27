@@ -27,14 +27,7 @@
     <property name="title">
      <string>File</string>
     </property>
-    <widget class="QMenu" name="menuOpen_Project">
-     <property name="title">
-      <string>Open Project</string>
-     </property>
-     <addaction name="actionRecent_project"/>
-     <addaction name="actionNew"/>
-    </widget>
-    <addaction name="menuOpen_Project"/>
+    <addaction name="actionOpen"/>
     <addaction name="actionNew_file"/>
    </widget>
    <widget class="QMenu" name="menuAbout">
@@ -64,7 +57,12 @@
   </action>
   <action name="actionNew_file">
    <property name="text">
-    <string>New file</string>
+    <string>New file...</string>
+   </property>
+  </action>
+  <action name="actionOpen">
+   <property name="text">
+    <string>Open...</string>
    </property>
   </action>
  </widget>
