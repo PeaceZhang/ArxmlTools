@@ -46,12 +46,23 @@ class MyMainWindow(QMainWindow):
         project_view = QTabWidget()
         project_view.addTab(project_view_file_explorer, "File Explorer")
         project_view.addTab(project_view_model_explorer, "Model Explorer")
-        text_edit2 = QTextEdit()
+
+        # 创建右侧 Splitter
+        content_view = QSplitter(Qt.Vertical)
+        content_view.addWidget(QTextEdit())
+        content_view.addWidget(QTextEdit())
+        content_view.setSizes([100, 100])
+
+        # 创建左侧 Splitter
+        explorer_view = QSplitter(Qt.Vertical)
+        explorer_view.addWidget(project_view)
+        explorer_view.addWidget(QTextEdit())
+        explorer_view.setSizes([100, 100])
 
         # 创建一个 QSplitter
         splitter = QSplitter(Qt.Horizontal)
-        splitter.addWidget(project_view)
-        splitter.addWidget(text_edit2)
+        splitter.addWidget(explorer_view)
+        splitter.addWidget(content_view)
         splitter.setSizes([230, 570])
 
         # 设置主窗口的中央部件为 QSplitter
