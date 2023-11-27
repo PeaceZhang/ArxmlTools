@@ -1,7 +1,8 @@
-from PySide6.QtWidgets import QApplication, QMainWindow, QMessageBox, QTextEdit, QSplitter, QTabWidget, QTreeView
+from PySide6.QtWidgets import QApplication, QMainWindow, QMessageBox, QTextEdit, QSplitter, QTabWidget, QTreeWidget
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QAction, QIcon
 from FileExplorer import FileExplorer
+from ModelExplorer import ModelExplorer
 import sys
 
 
@@ -42,7 +43,7 @@ class MyMainWindow(QMainWindow):
         # 布局
         # 设置两个子窗口部件
         project_view_file_explorer = FileExplorer()
-        project_view_model_explorer = QTreeView()
+        project_view_model_explorer = ModelExplorer()
         project_view = QTabWidget()
         project_view.addTab(project_view_file_explorer, "File Explorer")
         project_view.addTab(project_view_model_explorer, "Model Explorer")
