@@ -1,4 +1,4 @@
-from PySide6.QtWidgets import QApplication, QMainWindow, QMessageBox, QTextEdit, QSplitter, QTabWidget, QTreeWidget
+from PySide6.QtWidgets import QApplication, QMainWindow, QMessageBox, QTextEdit, QSplitter, QTabWidget
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QAction, QIcon
 from FileExplorer import FileExplorer
