@@ -49,6 +49,7 @@ class MyMainWindow(QMainWindow):
         # 连接file explorer页面选择根路径方法
         self.workspace_path_select_signal.connect(project_view_file_explorer.set_workspace_path)
         project_view_model_explorer = ModelExplorer()
+        self.workspace_path_select_signal.connect(project_view_model_explorer.set_workspace_path)
         project_view = QTabWidget()
         project_view.addTab(project_view_file_explorer, "File Explorer")
         project_view.addTab(project_view_model_explorer, "Model Explorer")
@@ -81,9 +82,14 @@ class MyMainWindow(QMainWindow):
 
     def open_folder(self):
         # 打开文件夹
-        folder_path = QFileDialog.getExistingDirectory(self, "Open Folder", "/")
+        folder_path = QFileDialog.getExistingDirectory(self, "Open Folder", "D:\AutosarTutorial\ArxmlTools\Export")
         # 将打开的文件夹路径发送给file explorer页面
         self.workspace_path_select_signal.emit(folder_path)
+
+    def draw_model_explorer(self):
+        pass
+    def draw_file_explorer(self):
+        pass
 
 def main():
     app = QApplication(sys.argv)

@@ -14,4 +14,3 @@ class FileExplorer(QTreeView):
     def set_workspace_path(self, folder_path):
         # 设置工作路径
         self.setRootIndex(self.model.index(folder_path))
-        print(folder_path)
