@@ -1,11 +1,15 @@
 from PySide6.QtWidgets import QApplication, QMainWindow, QMessageBox, QTextEdit, QSplitter, QTabWidget, QFileDialog
-from PySide6.QtCore import Qt
+from PySide6.QtCore import Qt, Signal
 from PySide6.QtGui import QAction, QIcon
 from FileExplorer import FileExplorer
 from ModelExplorer import ModelExplorer
 import sys
 
+
 class MyMainWindow(QMainWindow):
+    # 设置menu/file/openfolder->file explorer信号
+    workspace_path_select_signal = Signal(str)
+
     def __init__(self):
         super().__init__()
 
@@ -42,6 +46,8 @@ class MyMainWindow(QMainWindow):
         # 布局
         # 设置两个子窗口部件
         project_view_file_explorer = FileExplorer()
+        # 连接file explorer页面选择根路径方法
+        self.workspace_path_select_signal.connect(project_view_file_explorer.set_workspace_path)
         project_view_model_explorer = ModelExplorer()
         project_view = QTabWidget()
         project_view.addTab(project_view_file_explorer, "File Explorer")
@@ -76,8 +82,8 @@ class MyMainWindow(QMainWindow):
     def open_folder(self):
         # 打开文件夹
         folder_path = QFileDialog.getExistingDirectory(self, "Open Folder", "/")
-        print(folder_path)
-
+        # 将打开的文件夹路径发送给file explorer页面
+        self.workspace_path_select_signal.emit(folder_path)
 
 def main():
     app = QApplication(sys.argv)
