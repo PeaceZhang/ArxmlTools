@@ -1,4 +1,4 @@
-from PySide6.QtWidgets import QApplication, QMainWindow, QMessageBox, QTextEdit, QSplitter, QTabWidget
+from PySide6.QtWidgets import QApplication, QMainWindow, QMessageBox, QTextEdit, QSplitter, QTabWidget, QFileDialog
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QAction, QIcon
 from FileExplorer import FileExplorer
@@ -75,7 +75,8 @@ class MyMainWindow(QMainWindow):
 
     def open_folder(self):
         # 打开文件夹
-        pass
+        folder_path = QFileDialog.getExistingDirectory(self, "Open Folder", "/")
+        print(folder_path)
 
 
 def main():

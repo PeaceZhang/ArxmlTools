@@ -1,40 +1,67 @@
-from PySide6.QtWidgets import QApplication, QMainWindow, QTreeWidget, QTreeWidgetItem
+from PySide6.QtCore import Qt, Signal, QObject
+from PySide6.QtWidgets import QApplication, QWidget, QVBoxLayout, QPushButton, QLabel, QLineEdit
 import sys
 
-class MyMainWindow(QMainWindow):
+class PageA(QWidget):
+    show_page_b_signal = Signal(str)
+
     def __init__(self):
         super().__init__()
 
-        # 设置主窗口的默认大小
-        self.setGeometry(100, 100, 400, 300)
+        layout = QVBoxLayout(self)
 
-        # 使用 QTreeWidget 显示树形数据
-        tree_widget = QTreeWidget(self)
-        tree_widget.setHeaderLabels(["Column 1", "Column 2"])
+        self.input_line_edit = QLineEdit(self)
+        layout.addWidget(self.input_line_edit)
 
-        # 添加根节点
-        root_item = QTreeWidgetItem(tree_widget, ["Root", "Root Data"])
+        button_a = QPushButton("Show Page B", self)
+        button_a.clicked.connect(self.show_page_b)
+        layout.addWidget(button_a)
 
-        # 添加子节点
-        child_item = QTreeWidgetItem(root_item, ["Child", "Child Data"])
+    def show_page_b(self):
+        input_text = self.input_line_edit.text()
+        self.show_page_b_signal.emit(input_text)
 
-        # 设置主窗口的中央部件为 QTreeWidget
-        self.setCentralWidget(tree_widget)
+class PageB(QWidget):
+    def __init__(self):
+        super().__init__()
 
-        # 设置主窗口属性
-        self.setWindowTitle("QTreeWidget Example")
+        layout = QVBoxLayout(self)
+
+        self.display_label = QLabel(self)
+        layout.addWidget(self.display_label)
+
+        button_b = QPushButton("Back to Page A", self)
+        button_b.clicked.connect(self.show_page_a)
+        layout.addWidget(button_b)
+
+    def show_page_a(self):
+        # Perform actions specific to Page B, if needed
+        self.display_label.setText("Received from Page A: {}".format(self.sender_data))
+        self.show()
+
+    def set_sender_data(self, data):
+        self.sender_data = data
+
+class PageManager(QObject):
+    def __init__(self):
+        super().__init__()
+
+        self.page_a = PageA()
+        self.page_b = PageB()
+
+        self.page_a.show_page_b_signal.connect(self.show_page_b)
+
+    def show_page_b(self, data):
+        self.page_b.set_sender_data(data)
+        self.page_b.show()
 
 def main():
     app = QApplication(sys.argv)
 
-    # 创建主窗口对象
-    main_window = MyMainWindow()
+    manager = PageManager()
+    manager.page_a.show()
 
-    # 显示主窗口
-    main_window.show()
-
-    # 运行应用程序
-    sys.exit(app.exec())
+    sys.exit(app.exec_())
 
 if __name__ == "__main__":
     main()
