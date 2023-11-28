@@ -4,8 +4,18 @@ import autosar
 import glob
 import os
 
-class ModelExplorer(QTreeWidget):
+class ModelExplorer:
     def __init__(self, path):
+        super().__init__()
+        self.view = AutosarView()
+
+        # 解析arxml数据
+        AutosarData(path)
+
+        # grandson_item = QTreeWidgetItem(DataTypes, ["grandson1", "grandson1 data"])
+
+class AutosarView(QTreeWidget):
+    def __init__(self):
         super().__init__()
 
         self.setHeaderLabels(["Ar Model", "Ar path"])
@@ -14,13 +24,14 @@ class ModelExplorer(QTreeWidget):
         self.root_item = QTreeWidgetItem(self, ["AUTOSAR"])
         icon = QIcon("Icon/autosar.jpg")
         self.root_item.setIcon(0, icon)
-        AutosarData(path)
-        # self.add_datatype_folder()
-        # self.add_compumethod_folder()
-        # self.add_Interfaces_folder()
-        # self.add_Components_folder()
-        # self.add_Compositions_folder()
-        # self.add_Infrastruture_folder()
+
+        # 添加一级子目录
+        self.add_datatype_folder()
+        self.add_compumethod_folder()
+        self.add_Interfaces_folder()
+        self.add_Components_folder()
+        self.add_Compositions_folder()
+        self.add_Infrastruture_folder()
 
     def add_datatype_folder(self):
         # 添加data type子目录
@@ -53,12 +64,6 @@ class ModelExplorer(QTreeWidget):
         icon = QIcon("Icon/Infrastructures.png")
         Infrastructures.setIcon(0, icon)
 
-        # grandson_item = QTreeWidgetItem(DataTypes, ["grandson1", "grandson1 data"])
-
-    def add_bastype(self):
-        pass
-
-
 class AutosarData:
     def __init__(self, workspace):
 
@@ -72,9 +77,6 @@ class AutosarData:
                 self.package_parser(pack1)
 
     def package_parser(self, package):
-        # print("package ref: ", package.ref)
-        # print("package name: ", package.name)
-        # print("package elements: ", package.elements)
         if package.subPackages:
             for son in package.subPackages:
                 self.package_parser(son)
@@ -82,7 +84,6 @@ class AutosarData:
             for ele in package.elements:
                 if isinstance(ele, autosar.datatype.SwBaseType):
                     print(ele.ref, ele.name, ele.parent, ele.nativeDeclaration, ele.size, ele.typeEncoding, ele.category)
-
                     pass
                 if isinstance(ele, autosar.datatype.ImplementationDataType):
                     # print(ele.ref)

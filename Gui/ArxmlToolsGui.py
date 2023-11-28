@@ -76,7 +76,7 @@ class MyMainWindow(QMainWindow):
 
     def draw_model_explorer(self, path):
         project_view_model_explorer = ModelExplorer(path)
-        self.project_view.addTab(project_view_model_explorer, "Model Explorer")
+        self.project_view.addTab(project_view_model_explorer.view, "Model Explorer")
         pass
 
     def draw_file_explorer(self, path):
