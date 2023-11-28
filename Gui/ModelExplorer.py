@@ -5,7 +5,7 @@ import glob
 import os
 
 class ModelExplorer(QTreeWidget):
-    def __init__(self):
+    def __init__(self, path):
         super().__init__()
 
         self.setHeaderLabels(["Ar Model", "Ar path"])
@@ -14,12 +14,13 @@ class ModelExplorer(QTreeWidget):
         self.root_item = QTreeWidgetItem(self, ["AUTOSAR"])
         icon = QIcon("Icon/autosar.jpg")
         self.root_item.setIcon(0, icon)
-        self.add_datatype_folder()
-        self.add_compumethod_folder()
-        self.add_Interfaces_folder()
-        self.add_Components_folder()
-        self.add_Compositions_folder()
-        self.add_Infrastruture_folder()
+        AutosarData(path)
+        # self.add_datatype_folder()
+        # self.add_compumethod_folder()
+        # self.add_Interfaces_folder()
+        # self.add_Components_folder()
+        # self.add_Compositions_folder()
+        # self.add_Infrastruture_folder()
 
     def add_datatype_folder(self):
         # 添加data type子目录
@@ -54,10 +55,6 @@ class ModelExplorer(QTreeWidget):
 
         # grandson_item = QTreeWidgetItem(DataTypes, ["grandson1", "grandson1 data"])
 
-    def set_workspace_path(self, folder_path):
-        print("Model explorer path: ", folder_path)
-        AutosarData(folder_path)
-        pass
     def add_bastype(self):
         pass
 

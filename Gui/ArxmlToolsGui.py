@@ -7,9 +7,6 @@ import sys
 
 
 class MyMainWindow(QMainWindow):
-    # 设置menu/file/openfolder->file explorer信号
-    workspace_path_select_signal = Signal(str)
-
     def __init__(self):
         super().__init__()
 
@@ -43,17 +40,7 @@ class MyMainWindow(QMainWindow):
         # 在 "About" 菜单下添加版本信息动作
         about_menu.addAction(action_version)
 
-        # 布局
-        # 设置两个子窗口部件
-        project_view_file_explorer = FileExplorer()
-        # 连接file explorer页面选择根路径方法
-        self.workspace_path_select_signal.connect(project_view_file_explorer.set_workspace_path)
-        project_view_model_explorer = ModelExplorer()
-        self.workspace_path_select_signal.connect(project_view_model_explorer.set_workspace_path)
-        project_view = QTabWidget()
-        project_view.addTab(project_view_file_explorer, "File Explorer")
-        project_view.addTab(project_view_model_explorer, "Model Explorer")
-
+        self.project_view = QTabWidget()
         # 创建右侧 Splitter
         content_view = QSplitter(Qt.Vertical)
         content_view.addWidget(QTextEdit())
@@ -62,7 +49,7 @@ class MyMainWindow(QMainWindow):
 
         # 创建左侧 Splitter
         explorer_view = QSplitter(Qt.Vertical)
-        explorer_view.addWidget(project_view)
+        explorer_view.addWidget(self.project_view)
         explorer_view.addWidget(QTextEdit())
         explorer_view.setSizes([100, 100])
 
@@ -83,12 +70,18 @@ class MyMainWindow(QMainWindow):
     def open_folder(self):
         # 打开文件夹
         folder_path = QFileDialog.getExistingDirectory(self, "Open Folder", "D:\AutosarTutorial\ArxmlTools\Export")
-        # 将打开的文件夹路径发送给file explorer页面
-        self.workspace_path_select_signal.emit(folder_path)
+        print(folder_path)
+        self.draw_model_explorer(folder_path)
+        self.draw_file_explorer(folder_path)
 
-    def draw_model_explorer(self):
+    def draw_model_explorer(self, path):
+        project_view_model_explorer = ModelExplorer(path)
+        self.project_view.addTab(project_view_model_explorer, "Model Explorer")
         pass
-    def draw_file_explorer(self):
+
+    def draw_file_explorer(self, path):
+        project_view_file_explorer = FileExplorer(path)
+        self.project_view.addTab(project_view_file_explorer, "File Explorer")
         pass
 
 def main():
