@@ -1,5 +1,5 @@
 from PySide6.QtWidgets import QTreeWidget, QTreeWidgetItem
-from PySide6.QtGui import QIcon
+from PySide6.QtGui import QIcon, QFont
 import autosar
 import glob
 import os
@@ -49,10 +49,13 @@ class AutosarView(QTreeWidget):
         self.datatypes_basetypes_folder = QTreeWidgetItem(self.datatypes_folder, ["Base Types"])
         icon = QIcon("Icon/DataTypes.png")
         self.datatypes_basetypes_folder.setIcon(0, icon)
+
     def add_basetype_item(self, name):
         if self.datatypes_basetypes_folder is None:
             self.add_datatype_basetype_folder()
         basetypeitem = QTreeWidgetItem(self.datatypes_basetypes_folder, name)
+        basetypeitem.setFont(0, QFont("Consolas"))
+        basetypeitem.setFont(1, QFont("Consolas"))
         pass
 
     def add_compumethod_folder(self):
