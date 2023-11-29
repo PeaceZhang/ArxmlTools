@@ -12,8 +12,6 @@ class ModelExplorer:
         # 解析arxml数据
         AutosarData(path, self.view)
 
-        # grandson_item = QTreeWidgetItem(DataTypes, ["grandson1", "grandson1 data"])
-
 class AutosarView(QTreeWidget):
     def __init__(self):
         super().__init__()
@@ -30,15 +28,15 @@ class AutosarView(QTreeWidget):
 
         # 添加一级子目录
         self.add_datatype_folder()
-        self.add_compumethod_folder()
         self.add_Interfaces_folder()
         self.add_Components_folder()
         self.add_Compositions_folder()
         self.add_Infrastruture_folder()
-        # self.add_datatype_basetype_folder()
 
         self.datatypes_basetypes_folder = None
         self.datatypes_implementation_folder = None
+        self.Infrastruture_compumethod_folder = None
+        self.Infrastruture_dataconstraint_folder = None
 
     def add_datatype_folder(self):
         # 添加data type子目录
@@ -58,7 +56,7 @@ class AutosarView(QTreeWidget):
         basetypeitem.setFont(0, QFont("Consolas"))
         basetypeitem.setFont(1, QFont("Consolas"))
         basetypeitem.setIcon(0, QIcon("Icon/basetype.png"))
-        pass
+
     def add_datatype_implementation_folder(self):
         self.datatypes_implementation_folder = QTreeWidgetItem(self.datatypes_folder, ["Implementation Data Types"])
         icon = QIcon("Icon/bastypes.png")
@@ -73,10 +71,31 @@ class AutosarView(QTreeWidget):
         impletype_item.setIcon(0, QIcon("Icon/basetype.png"))
 
 
-    def add_compumethod_folder(self):
-        CompuMethod = QTreeWidgetItem(self.root_item, ["Compu Method"])
+    def add_Infrastruture_compumethod_folder(self):
+        self.Infrastruture_compumethod_folder = QTreeWidgetItem(self.Infrastructures_folder, ["Compu Method"])
         icon = QIcon("Icon/CompuMethod.png")
-        CompuMethod.setIcon(0, icon)
+        self.Infrastruture_compumethod_folder.setIcon(0, icon)
+
+    def add_compumethod_item(self, name):
+        if self.Infrastruture_compumethod_folder is None:
+            self.add_Infrastruture_compumethod_folder()
+        compumethod_item = QTreeWidgetItem(self.Infrastruture_compumethod_folder, name)
+        compumethod_item.setFont(0, QFont("Consolas"))
+        compumethod_item.setFont(1, QFont("Consolas"))
+        compumethod_item.setIcon(0, QIcon("Icon/CompuMethod.png"))
+
+    def add_Infrastruture_dataconstraint_folder(self):
+        self.Infrastruture_dataconstraint_folder = QTreeWidgetItem(self.Infrastructures_folder, ["Data Constraint"])
+        icon = QIcon("Icon/dataconstraint.png")
+        self.Infrastruture_dataconstraint_folder.setIcon(0, icon)
+
+    def add_dataconstraint_item(self, name):
+        if self.Infrastruture_dataconstraint_folder is None:
+            self.add_Infrastruture_dataconstraint_folder()
+        dataconstraint_item = QTreeWidgetItem(self.Infrastruture_dataconstraint_folder, name)
+        dataconstraint_item.setFont(0, QFont("Consolas"))
+        dataconstraint_item.setFont(1, QFont("Consolas"))
+        dataconstraint_item.setIcon(0, QIcon("Icon/dataconstraint.png"))
 
     def add_Interfaces_folder(self):
         Interfaces = QTreeWidgetItem(self.root_item, ["Interfaces"])
@@ -94,9 +113,9 @@ class AutosarView(QTreeWidget):
         Compositions.setIcon(0, icon)
 
     def add_Infrastruture_folder(self):
-        Infrastructures = QTreeWidgetItem(self.root_item, ["Infrastructures"])
+        self.Infrastructures_folder = QTreeWidgetItem(self.root_item, ["Infrastructures"])
         icon = QIcon("Icon/Infrastructures.png")
-        Infrastructures.setIcon(0, icon)
+        self.Infrastructures_folder.setIcon(0, icon)
 
 class AutosarData:
     def __init__(self, workspace, view):
@@ -127,8 +146,10 @@ class AutosarData:
                     pass
                 if isinstance(ele, autosar.datatype.CompuMethod):
                     # print(ele.ref)
+                    view.add_compumethod_item([ele.name, ele.ref])
                     pass
                 if isinstance(ele, autosar.datatype.DataConstraint):
+                    view.add_dataconstraint_item([ele.name, ele.ref])
                     # print(ele.ref)
                     pass
                 if isinstance(ele, autosar.datatype.Unit):
