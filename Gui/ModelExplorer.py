@@ -37,6 +37,7 @@ class AutosarView(QTreeWidget):
         self.datatypes_implementation_folder = None
         self.Infrastruture_compumethod_folder = None
         self.Infrastruture_dataconstraint_folder = None
+        self.Infrastruture_Unit_folder = None
 
     def add_datatype_folder(self):
         # 添加data type子目录
@@ -97,6 +98,19 @@ class AutosarView(QTreeWidget):
         dataconstraint_item.setFont(1, QFont("Consolas"))
         dataconstraint_item.setIcon(0, QIcon("Icon/dataconstraint.png"))
 
+    def add_Infrastruture_Unit_folder(self):
+        self.Infrastruture_Unit_folder = QTreeWidgetItem(self.Infrastructures_folder, ["Unit"])
+        icon = QIcon("Icon/unit.png")
+        self.Infrastruture_Unit_folder.setIcon(0, icon)
+
+    def add_Unit_item(self, name):
+        if self.Infrastruture_Unit_folder is None:
+            self.add_Infrastruture_Unit_folder()
+        Unit_item = QTreeWidgetItem(self.Infrastruture_Unit_folder, name)
+        Unit_item.setFont(0, QFont("Consolas"))
+        Unit_item.setFont(1, QFont("Consolas"))
+        Unit_item.setIcon(0, QIcon("Icon/unit.png"))
+
     def add_Interfaces_folder(self):
         Interfaces = QTreeWidgetItem(self.root_item, ["Interfaces"])
         icon = QIcon("Icon/Interfaces.png")
@@ -153,6 +167,7 @@ class AutosarData:
                     # print(ele.ref)
                     pass
                 if isinstance(ele, autosar.datatype.Unit):
+                    view.add_Unit_item([ele.name, ele.ref])
                     # print(ele.ref)
                     pass
                 if isinstance(ele, autosar.portinterface.SenderReceiverInterface):
