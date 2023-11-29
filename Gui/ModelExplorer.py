@@ -38,6 +38,8 @@ class AutosarView(QTreeWidget):
         self.Infrastruture_compumethod_folder = None
         self.Infrastruture_dataconstraint_folder = None
         self.Infrastruture_Unit_folder = None
+        self.Interfaces_SRIterface_folder = None
+        self.Interfaces_CSIterface_folder = None
 
     def add_datatype_folder(self):
         # 添加data type子目录
@@ -112,19 +114,57 @@ class AutosarView(QTreeWidget):
         Unit_item.setIcon(0, QIcon("Icon/unit.png"))
 
     def add_Interfaces_folder(self):
-        Interfaces = QTreeWidgetItem(self.root_item, ["Interfaces"])
+        self.Interfaces_folder = QTreeWidgetItem(self.root_item, ["Interfaces"])
         icon = QIcon("Icon/Interfaces.png")
-        Interfaces.setIcon(0, icon)
+        self.Interfaces_folder.setIcon(0, icon)
+
+    def add_Interfaces_SRIterface_folder(self):
+        self.Interfaces_SRIterface_folder = QTreeWidgetItem(self.Interfaces_folder, ["SR Interfaces"])
+        icon = QIcon("Icon/srinterface.png")
+        self.Interfaces_SRIterface_folder.setIcon(0, icon)
+
+    def add_SRInterface_item(self, name):
+        if self.Interfaces_SRIterface_folder is None:
+            self.add_Interfaces_SRIterface_folder()
+        SRInterface_item = QTreeWidgetItem(self.Interfaces_SRIterface_folder, name)
+        SRInterface_item.setFont(0, QFont("Consolas"))
+        SRInterface_item.setFont(1, QFont("Consolas"))
+        SRInterface_item.setIcon(0, QIcon("Icon/srinterface.png"))
+
+    def add_Interfaces_CSIterface_folder(self):
+        self.Interfaces_CSIterface_folder = QTreeWidgetItem(self.Interfaces_folder, ["CS Interfaces"])
+        icon = QIcon("Icon/csinterface.png")
+        self.Interfaces_CSIterface_folder.setIcon(0, icon)
+
+    def add_CSInterface_item(self, name):
+        if self.Interfaces_CSIterface_folder is None:
+            self.add_Interfaces_CSIterface_folder()
+        CSInterface_item = QTreeWidgetItem(self.Interfaces_CSIterface_folder, name)
+        CSInterface_item.setFont(0, QFont("Consolas"))
+        CSInterface_item.setFont(1, QFont("Consolas"))
+        CSInterface_item.setIcon(0, QIcon("Icon/csinterface.png"))
 
     def add_Components_folder(self):
-        Components = QTreeWidgetItem(self.root_item, ["Components"])
+        self.Components_folder = QTreeWidgetItem(self.root_item, ["Components"])
         icon = QIcon("Icon/swc.png")
-        Components.setIcon(0, icon)
+        self.Components_folder.setIcon(0, icon)
+
+    def add_swc_item(self, name):
+        swc_item = QTreeWidgetItem(self.Components_folder, name)
+        swc_item.setFont(0, QFont("Consolas"))
+        swc_item.setFont(1, QFont("Consolas"))
+        swc_item.setIcon(0, QIcon("Icon/swc.png"))
 
     def add_Compositions_folder(self):
-        Compositions = QTreeWidgetItem(self.root_item, ["Compositions"])
+        self.Compositions_foler = QTreeWidgetItem(self.root_item, ["Compositions"])
         icon = QIcon("Icon/composition.png")
-        Compositions.setIcon(0, icon)
+        self.Compositions_foler.setIcon(0, icon)
+
+    def add_composition_item(self, name):
+        composition_item = QTreeWidgetItem(self.Compositions_foler, name)
+        composition_item.setFont(0, QFont("Consolas"))
+        composition_item.setFont(1, QFont("Consolas"))
+        composition_item.setIcon(0, QIcon("Icon/composition.png"))
 
     def add_Infrastruture_folder(self):
         self.Infrastructures_folder = QTreeWidgetItem(self.root_item, ["Infrastructures"])
@@ -154,7 +194,7 @@ class AutosarData:
                     view.add_basetype_item([ele.name, ele.ref])
                     pass
                 if isinstance(ele, autosar.datatype.ImplementationDataType):
-                    print(ele.ref, ele.name, ele.parent, ele.category, ele.arraySize, ele.compuMethodRef, ele.baseTypeRef, ele.implementationTypeRef)
+                    # print(ele.ref, ele.name, ele.parent, ele.category, ele.arraySize, ele.compuMethodRef, ele.baseTypeRef, ele.implementationTypeRef)
                     # print(ele.ref)
                     view.add_impletype_item([ele.name, ele.ref])
                     pass
@@ -171,15 +211,19 @@ class AutosarData:
                     # print(ele.ref)
                     pass
                 if isinstance(ele, autosar.portinterface.SenderReceiverInterface):
+                    view.add_SRInterface_item([ele.name, ele.ref])
                     # print(ele.ref)
                     pass
                 if isinstance(ele, autosar.portinterface.ClientServerInterface):
                     # print(ele.ref)
+                    view.add_CSInterface_item([ele.name, ele.ref])
                     pass
                 if isinstance(ele, autosar.component.ApplicationSoftwareComponent):
+                    view.add_swc_item([ele.name, ele.ref])
                     # print(ele.ref)
                     pass
                 if isinstance(ele, autosar.component.CompositionComponent):
+                    view.add_composition_item([ele.name, ele.ref])
                     # print(ele.ref)
                     pass
 
