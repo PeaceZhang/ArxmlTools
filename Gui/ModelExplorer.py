@@ -38,6 +38,7 @@ class AutosarView(QTreeWidget):
         # self.add_datatype_basetype_folder()
 
         self.datatypes_basetypes_folder = None
+        self.datatypes_implementation_folder = None
 
     def add_datatype_folder(self):
         # 添加data type子目录
@@ -47,7 +48,7 @@ class AutosarView(QTreeWidget):
 
     def add_datatype_basetype_folder(self):
         self.datatypes_basetypes_folder = QTreeWidgetItem(self.datatypes_folder, ["Base Types"])
-        icon = QIcon("Icon/DataTypes.png")
+        icon = QIcon("Icon/bastypes.png")
         self.datatypes_basetypes_folder.setIcon(0, icon)
 
     def add_basetype_item(self, name):
@@ -56,7 +57,21 @@ class AutosarView(QTreeWidget):
         basetypeitem = QTreeWidgetItem(self.datatypes_basetypes_folder, name)
         basetypeitem.setFont(0, QFont("Consolas"))
         basetypeitem.setFont(1, QFont("Consolas"))
+        basetypeitem.setIcon(0, QIcon("Icon/basetype.png"))
         pass
+    def add_datatype_implementation_folder(self):
+        self.datatypes_implementation_folder = QTreeWidgetItem(self.datatypes_folder, ["Implementation Data Types"])
+        icon = QIcon("Icon/bastypes.png")
+        self.datatypes_implementation_folder.setIcon(0, icon)
+
+    def add_impletype_item(self, name):
+        if self.datatypes_implementation_folder is None:
+            self.add_datatype_implementation_folder()
+        impletype_item = QTreeWidgetItem(self.datatypes_implementation_folder, name)
+        impletype_item.setFont(0, QFont("Consolas"))
+        impletype_item.setFont(1, QFont("Consolas"))
+        impletype_item.setIcon(0, QIcon("Icon/basetype.png"))
+
 
     def add_compumethod_folder(self):
         CompuMethod = QTreeWidgetItem(self.root_item, ["Compu Method"])
@@ -102,11 +117,13 @@ class AutosarData:
         if package.elements:
             for ele in package.elements:
                 if isinstance(ele, autosar.datatype.SwBaseType):
-                    print(ele.ref, ele.name, ele.parent, ele.nativeDeclaration, ele.size, ele.typeEncoding, ele.category)
+                    # print(ele.ref, ele.name, ele.parent, ele.nativeDeclaration, ele.size, ele.typeEncoding, ele.category)
                     view.add_basetype_item([ele.name, ele.ref])
                     pass
                 if isinstance(ele, autosar.datatype.ImplementationDataType):
+                    print(ele.ref, ele.name, ele.parent, ele.category, ele.arraySize, ele.compuMethodRef, ele.baseTypeRef, ele.implementationTypeRef)
                     # print(ele.ref)
+                    view.add_impletype_item([ele.name, ele.ref])
                     pass
                 if isinstance(ele, autosar.datatype.CompuMethod):
                     # print(ele.ref)
@@ -135,5 +152,4 @@ class AutosarData:
         file_list = glob.glob(pattern, recursive=True)
         return file_list
 
-if __name__ == "__main__":
-    AutosarData('D:\AutosarTutorial\ArxmlTools\Export')
+
