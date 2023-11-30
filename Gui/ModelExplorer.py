@@ -1,5 +1,6 @@
-from PySide6.QtWidgets import QTreeWidget, QTreeWidgetItem
-from PySide6.QtGui import QIcon, QFont
+from PySide6.QtWidgets import QWidget, QTreeWidget, QTreeWidgetItem, QToolBar, QVBoxLayout, QSizePolicy
+from PySide6.QtGui import QIcon, QFont, QAction
+from PySide6.QtCore import Qt
 import autosar
 import glob
 import os
@@ -12,19 +13,49 @@ class ModelExplorer:
         # 解析arxml数据
         AutosarData(path, self.view)
 
-class AutosarView(QTreeWidget):
+class AutosarView(QWidget):
     def __init__(self):
         super().__init__()
 
-        self.setHeaderLabels(["Ar Model", "Ar path"])
-        self.setColumnWidth(0, 200)
+        self.toolbar = QToolBar(self)
+        self.toolbar.setFixedHeight(24)
+        # self.toolbar.setStyleSheet("background-color: #f0f0f0;")
+        # 创建占位符，使工具按钮靠右对齐
+        spacer = QWidget()
+        spacer.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Preferred)
+
+        # 将占位符添加到工具栏
+        self.toolbar.addWidget(spacer)
+
+        expand_action = QAction("Expand ALL", self)
+        icon = QIcon("Icon/expand.png")
+        expand_action.setIcon(icon)
+        expand_action.triggered.connect(self.expand_treeview_allitems)
+        self.toolbar.addAction(expand_action)
+
+        collapse_action = QAction("Collapse ALL", self)
+        icon = QIcon("Icon/collapse.png")
+        collapse_action.setIcon(icon)
+        collapse_action.triggered.connect(self.collapse_treeview_allitems)
+        self.toolbar.addAction(collapse_action)
+
+        self.treeview = QTreeWidget(self)
+
+        layout = QVBoxLayout(self)
+        layout.setSpacing(0)
+        layout.setContentsMargins(0, 0, 0, 0)
+        layout.addWidget(self.toolbar)
+        layout.addWidget(self.treeview)
+
+        self.treeview.setHeaderLabels(["Ar Model", "Ar path"])
+        self.treeview.setColumnWidth(0, 200)
         # 添加根节点
-        self.root_item = QTreeWidgetItem(self, ["AUTOSAR"])
+        self.treeview.root_item = QTreeWidgetItem(self.treeview, ["AUTOSAR"])
         # 设置根节点Icon
         icon = QIcon("Icon/autosar.jpg")
-        self.root_item.setIcon(0, icon)
+        self.treeview.root_item.setIcon(0, icon)
         # 设置默认展开
-        self.root_item.setExpanded(True)
+        self.treeview.root_item.setExpanded(True)
 
         # 添加一级子目录
         self.add_datatype_folder()
@@ -33,143 +64,149 @@ class AutosarView(QTreeWidget):
         self.add_Compositions_folder()
         self.add_Infrastruture_folder()
 
-        self.datatypes_basetypes_folder = None
-        self.datatypes_implementation_folder = None
-        self.Infrastruture_compumethod_folder = None
-        self.Infrastruture_dataconstraint_folder = None
-        self.Infrastruture_Unit_folder = None
-        self.Interfaces_SRIterface_folder = None
-        self.Interfaces_CSIterface_folder = None
+        self.treeview.datatypes_basetypes_folder = None
+        self.treeview.datatypes_implementation_folder = None
+        self.treeview.Infrastruture_compumethod_folder = None
+        self.treeview.Infrastruture_dataconstraint_folder = None
+        self.treeview.Infrastruture_Unit_folder = None
+        self.treeview.Interfaces_SRIterface_folder = None
+        self.treeview.Interfaces_CSIterface_folder = None
+
+    def expand_treeview_allitems(self):
+        self.treeview.expandAll()
+
+    def collapse_treeview_allitems(self):
+        self.treeview.collapseAll()
 
     def add_datatype_folder(self):
         # 添加data type子目录
-        self.datatypes_folder = QTreeWidgetItem(self.root_item, ["Data Types"])
+        self.datatypes_folder = QTreeWidgetItem(self.treeview.root_item, ["Data Types"])
         icon = QIcon("Icon/DataTypes.png")
         self.datatypes_folder.setIcon(0, icon)
 
     def add_datatype_basetype_folder(self):
-        self.datatypes_basetypes_folder = QTreeWidgetItem(self.datatypes_folder, ["Base Types"])
+        self.treeview.datatypes_basetypes_folder = QTreeWidgetItem(self.datatypes_folder, ["Base Types"])
         icon = QIcon("Icon/bastypes.png")
-        self.datatypes_basetypes_folder.setIcon(0, icon)
+        self.treeview.datatypes_basetypes_folder.setIcon(0, icon)
 
     def add_basetype_item(self, name):
-        if self.datatypes_basetypes_folder is None:
+        if self.treeview.datatypes_basetypes_folder is None:
             self.add_datatype_basetype_folder()
-        basetypeitem = QTreeWidgetItem(self.datatypes_basetypes_folder, name)
+        basetypeitem = QTreeWidgetItem(self.treeview.datatypes_basetypes_folder, name)
         basetypeitem.setFont(0, QFont("Consolas"))
         basetypeitem.setFont(1, QFont("Consolas"))
         basetypeitem.setIcon(0, QIcon("Icon/basetype.png"))
 
     def add_datatype_implementation_folder(self):
-        self.datatypes_implementation_folder = QTreeWidgetItem(self.datatypes_folder, ["Implementation Data Types"])
+        self.treeview.datatypes_implementation_folder = QTreeWidgetItem(self.datatypes_folder, ["Implementation Data Types"])
         icon = QIcon("Icon/bastypes.png")
-        self.datatypes_implementation_folder.setIcon(0, icon)
+        self.treeview.datatypes_implementation_folder.setIcon(0, icon)
 
     def add_impletype_item(self, name):
-        if self.datatypes_implementation_folder is None:
+        if self.treeview.datatypes_implementation_folder is None:
             self.add_datatype_implementation_folder()
-        impletype_item = QTreeWidgetItem(self.datatypes_implementation_folder, name)
+        impletype_item = QTreeWidgetItem(self.treeview.datatypes_implementation_folder, name)
         impletype_item.setFont(0, QFont("Consolas"))
         impletype_item.setFont(1, QFont("Consolas"))
         impletype_item.setIcon(0, QIcon("Icon/basetype.png"))
 
 
     def add_Infrastruture_compumethod_folder(self):
-        self.Infrastruture_compumethod_folder = QTreeWidgetItem(self.Infrastructures_folder, ["Compu Method"])
+        self.treeview.Infrastruture_compumethod_folder = QTreeWidgetItem(self.treeview.Infrastructures_folder, ["Compu Method"])
         icon = QIcon("Icon/CompuMethod.png")
-        self.Infrastruture_compumethod_folder.setIcon(0, icon)
+        self.treeview.Infrastruture_compumethod_folder.setIcon(0, icon)
 
     def add_compumethod_item(self, name):
-        if self.Infrastruture_compumethod_folder is None:
+        if self.treeview.Infrastruture_compumethod_folder is None:
             self.add_Infrastruture_compumethod_folder()
-        compumethod_item = QTreeWidgetItem(self.Infrastruture_compumethod_folder, name)
+        compumethod_item = QTreeWidgetItem(self.treeview.Infrastruture_compumethod_folder, name)
         compumethod_item.setFont(0, QFont("Consolas"))
         compumethod_item.setFont(1, QFont("Consolas"))
         compumethod_item.setIcon(0, QIcon("Icon/CompuMethod.png"))
 
     def add_Infrastruture_dataconstraint_folder(self):
-        self.Infrastruture_dataconstraint_folder = QTreeWidgetItem(self.Infrastructures_folder, ["Data Constraint"])
+        self.treeview.Infrastruture_dataconstraint_folder = QTreeWidgetItem(self.treeview.Infrastructures_folder, ["Data Constraint"])
         icon = QIcon("Icon/dataconstraint.png")
-        self.Infrastruture_dataconstraint_folder.setIcon(0, icon)
+        self.treeview.Infrastruture_dataconstraint_folder.setIcon(0, icon)
 
     def add_dataconstraint_item(self, name):
-        if self.Infrastruture_dataconstraint_folder is None:
+        if self.treeview.Infrastruture_dataconstraint_folder is None:
             self.add_Infrastruture_dataconstraint_folder()
-        dataconstraint_item = QTreeWidgetItem(self.Infrastruture_dataconstraint_folder, name)
+        dataconstraint_item = QTreeWidgetItem(self.treeview.Infrastruture_dataconstraint_folder, name)
         dataconstraint_item.setFont(0, QFont("Consolas"))
         dataconstraint_item.setFont(1, QFont("Consolas"))
         dataconstraint_item.setIcon(0, QIcon("Icon/dataconstraint.png"))
 
     def add_Infrastruture_Unit_folder(self):
-        self.Infrastruture_Unit_folder = QTreeWidgetItem(self.Infrastructures_folder, ["Unit"])
+        self.treeview.Infrastruture_Unit_folder = QTreeWidgetItem(self.treeview.Infrastructures_folder, ["Unit"])
         icon = QIcon("Icon/unit.png")
-        self.Infrastruture_Unit_folder.setIcon(0, icon)
+        self.treeview.Infrastruture_Unit_folder.setIcon(0, icon)
 
     def add_Unit_item(self, name):
-        if self.Infrastruture_Unit_folder is None:
+        if self.treeview.Infrastruture_Unit_folder is None:
             self.add_Infrastruture_Unit_folder()
-        Unit_item = QTreeWidgetItem(self.Infrastruture_Unit_folder, name)
+        Unit_item = QTreeWidgetItem(self.treeview.Infrastruture_Unit_folder, name)
         Unit_item.setFont(0, QFont("Consolas"))
         Unit_item.setFont(1, QFont("Consolas"))
         Unit_item.setIcon(0, QIcon("Icon/unit.png"))
 
     def add_Interfaces_folder(self):
-        self.Interfaces_folder = QTreeWidgetItem(self.root_item, ["Interfaces"])
+        self.Interfaces_folder = QTreeWidgetItem(self.treeview.root_item, ["Interfaces"])
         icon = QIcon("Icon/Interfaces.png")
         self.Interfaces_folder.setIcon(0, icon)
 
     def add_Interfaces_SRIterface_folder(self):
-        self.Interfaces_SRIterface_folder = QTreeWidgetItem(self.Interfaces_folder, ["SR Interfaces"])
+        self.treeview.Interfaces_SRIterface_folder = QTreeWidgetItem(self.Interfaces_folder, ["SR Interfaces"])
         icon = QIcon("Icon/srinterface.png")
-        self.Interfaces_SRIterface_folder.setIcon(0, icon)
+        self.treeview.Interfaces_SRIterface_folder.setIcon(0, icon)
 
     def add_SRInterface_item(self, name):
-        if self.Interfaces_SRIterface_folder is None:
+        if self.treeview.Interfaces_SRIterface_folder is None:
             self.add_Interfaces_SRIterface_folder()
-        SRInterface_item = QTreeWidgetItem(self.Interfaces_SRIterface_folder, name)
+        SRInterface_item = QTreeWidgetItem(self.treeview.Interfaces_SRIterface_folder, name)
         SRInterface_item.setFont(0, QFont("Consolas"))
         SRInterface_item.setFont(1, QFont("Consolas"))
         SRInterface_item.setIcon(0, QIcon("Icon/srinterface.png"))
 
     def add_Interfaces_CSIterface_folder(self):
-        self.Interfaces_CSIterface_folder = QTreeWidgetItem(self.Interfaces_folder, ["CS Interfaces"])
+        self.treeview.Interfaces_CSIterface_folder = QTreeWidgetItem(self.Interfaces_folder, ["CS Interfaces"])
         icon = QIcon("Icon/csinterface.png")
-        self.Interfaces_CSIterface_folder.setIcon(0, icon)
+        self.treeview.Interfaces_CSIterface_folder.setIcon(0, icon)
 
     def add_CSInterface_item(self, name):
-        if self.Interfaces_CSIterface_folder is None:
+        if self.treeview.Interfaces_CSIterface_folder is None:
             self.add_Interfaces_CSIterface_folder()
-        CSInterface_item = QTreeWidgetItem(self.Interfaces_CSIterface_folder, name)
+        CSInterface_item = QTreeWidgetItem(self.treeview.Interfaces_CSIterface_folder, name)
         CSInterface_item.setFont(0, QFont("Consolas"))
         CSInterface_item.setFont(1, QFont("Consolas"))
         CSInterface_item.setIcon(0, QIcon("Icon/csinterface.png"))
 
     def add_Components_folder(self):
-        self.Components_folder = QTreeWidgetItem(self.root_item, ["Components"])
+        self.treeview.Components_folder = QTreeWidgetItem(self.treeview.root_item, ["Components"])
         icon = QIcon("Icon/swc.png")
-        self.Components_folder.setIcon(0, icon)
+        self.treeview.Components_folder.setIcon(0, icon)
 
     def add_swc_item(self, name):
-        swc_item = QTreeWidgetItem(self.Components_folder, name)
+        swc_item = QTreeWidgetItem(self.treeview.Components_folder, name)
         swc_item.setFont(0, QFont("Consolas"))
         swc_item.setFont(1, QFont("Consolas"))
         swc_item.setIcon(0, QIcon("Icon/swc.png"))
 
     def add_Compositions_folder(self):
-        self.Compositions_foler = QTreeWidgetItem(self.root_item, ["Compositions"])
+        self.treeview.Compositions_foler = QTreeWidgetItem(self.treeview.root_item, ["Compositions"])
         icon = QIcon("Icon/composition.png")
-        self.Compositions_foler.setIcon(0, icon)
+        self.treeview.Compositions_foler.setIcon(0, icon)
 
     def add_composition_item(self, name):
-        composition_item = QTreeWidgetItem(self.Compositions_foler, name)
+        composition_item = QTreeWidgetItem(self.treeview.Compositions_foler, name)
         composition_item.setFont(0, QFont("Consolas"))
         composition_item.setFont(1, QFont("Consolas"))
         composition_item.setIcon(0, QIcon("Icon/composition.png"))
 
     def add_Infrastruture_folder(self):
-        self.Infrastructures_folder = QTreeWidgetItem(self.root_item, ["Infrastructures"])
+        self.treeview.Infrastructures_folder = QTreeWidgetItem(self.treeview.root_item, ["Infrastructures"])
         icon = QIcon("Icon/Infrastructures.png")
-        self.Infrastructures_folder.setIcon(0, icon)
+        self.treeview.Infrastructures_folder.setIcon(0, icon)
 
 class AutosarData:
     def __init__(self, workspace, view):
