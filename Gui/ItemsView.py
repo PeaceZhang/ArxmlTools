@@ -16,13 +16,7 @@ class ItemsView(QWidget):
 
         self.tree_view.setHeaderLabels(["Item", "Properties"])
 
-    def show_details(self, item, sss):
-        print(item)
-        print(sss)
-        # if 0 == item.childCount():
-        #     composition_item = QTreeWidgetItem(self.root_item, [item.text(0)])
-        # else:
-        #     self.root_item.addChild(item)
-        #     self.tree_view.addTopLevelItem(self.root_item)
+    def show_details(self, item):
         self.tree_view.clear()
-        QTreeWidgetItem(self.tree_view, [item.text(0), item.text(1)])
+        self.tree_view.addTopLevelItem(item.clone())
+
