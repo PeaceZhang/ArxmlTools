@@ -1,6 +1,7 @@
 from PySide6.QtWidgets import QWidget, QTreeWidget, QTreeWidgetItem, QToolBar, QVBoxLayout, QSizePolicy
 from PySide6.QtGui import QIcon, QFont, QAction
 from PySide6.QtCore import Qt
+from ItemsView import ItemsView
 import autosar
 import glob
 import os
@@ -202,6 +203,7 @@ class AutosarView(QWidget):
         composition_item.setFont(0, QFont("Consolas"))
         composition_item.setFont(1, QFont("Consolas"))
         composition_item.setIcon(0, QIcon("Icon/composition.png"))
+        # self.treeview.itemDoubleClicked.connect(ItemsView.show_details)
 
     def add_Infrastruture_folder(self):
         self.treeview.Infrastructures_folder = QTreeWidgetItem(self.treeview.root_item, ["Infrastructures"])

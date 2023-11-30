@@ -1,8 +1,9 @@
-from PySide6.QtWidgets import QApplication, QMainWindow, QMessageBox, QTextEdit, QSplitter, QTabWidget, QFileDialog
+from PySide6.QtWidgets import QApplication, QMainWindow, QMessageBox, QTextEdit, QSplitter, QTabWidget, QFileDialog, QWidget
 from PySide6.QtCore import Qt, Signal
 from PySide6.QtGui import QAction, QIcon
 from FileExplorer import FileExplorer
 from ModelExplorer import ModelExplorer
+from ItemsView import ItemsView
 import sys
 
 
@@ -40,13 +41,19 @@ class MyMainWindow(QMainWindow):
         # 在 "About" 菜单下添加版本信息动作
         about_menu.addAction(action_version)
 
-        self.project_view = QTabWidget()
+        self.itview = ItemsView()
+
+        main_operation_view = QSplitter(Qt.Horizontal)
+        main_operation_view.addWidget(self.itview)
+        main_operation_view.addWidget(QTextEdit())
+
         # 创建右侧 Splitter
         content_view = QSplitter(Qt.Vertical)
-        content_view.addWidget(QTextEdit())
+        content_view.addWidget(main_operation_view)
         content_view.addWidget(QTextEdit())
         content_view.setSizes([100, 100])
 
+        self.project_view = QTabWidget()
         # 创建左侧 Splitter
         explorer_view = QSplitter(Qt.Vertical)
         explorer_view.addWidget(self.project_view)
@@ -76,6 +83,7 @@ class MyMainWindow(QMainWindow):
 
     def draw_model_explorer(self, path):
         project_view_model_explorer = ModelExplorer(path)
+        project_view_model_explorer.view.treeview.itemClicked.connect(self.itview.show_details)
         self.project_view.addTab(project_view_model_explorer.view, "Model Explorer")
         pass
 
