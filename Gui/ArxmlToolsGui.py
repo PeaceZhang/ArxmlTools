@@ -4,6 +4,7 @@ from PySide6.QtGui import QAction, QIcon
 from FileExplorer import FileExplorer
 from ModelExplorer import ModelExplorer
 from ItemsView import ItemsView
+from DetailOperationView import DOV
 import sys
 
 
@@ -45,10 +46,11 @@ class MyMainWindow(QMainWindow):
         about_menu.addAction(action_version)
 
         self.itview = ItemsView()
+        self.dov = DOV()
 
         main_operation_view = QSplitter(Qt.Horizontal)
         main_operation_view.addWidget(self.itview)
-        main_operation_view.addWidget(QTextEdit())
+        main_operation_view.addWidget(self.dov.view)
         main_operation_view.setSizes([330, 1170])
 
         # 创建右侧 Splitter
