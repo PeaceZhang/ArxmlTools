@@ -20,6 +20,7 @@ class ItemsView(QWidget):
         self.setLayout(layout)
 
         self.tree_view.setHeaderLabels(["Item", "Properties"])
+        self.tree_view.setColumnWidth(0, 240)
 
     def get_armodel(self, armodel):
         self.armodel = armodel

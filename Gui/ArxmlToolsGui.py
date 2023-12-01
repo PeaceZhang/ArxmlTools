@@ -13,7 +13,8 @@ class MyMainWindow(QMainWindow):
 
         self.project_view_model_explorer = None
 
-        self.setGeometry(100, 100, 800, 600)
+        self.setGeometry(0, 0, 800, 600)
+        self.showMaximized()
 
         # 设置主窗口属性
         self.setWindowTitle("ArxmlTools")
@@ -48,25 +49,26 @@ class MyMainWindow(QMainWindow):
         main_operation_view = QSplitter(Qt.Horizontal)
         main_operation_view.addWidget(self.itview)
         main_operation_view.addWidget(QTextEdit())
+        main_operation_view.setSizes([330, 1170])
 
         # 创建右侧 Splitter
         content_view = QSplitter(Qt.Vertical)
         content_view.addWidget(main_operation_view)
         content_view.addWidget(QTextEdit())
-        content_view.setSizes([100, 100])
+        content_view.setSizes([620, 280])
 
         self.project_view = QTabWidget()
         # 创建左侧 Splitter
         explorer_view = QSplitter(Qt.Vertical)
         explorer_view.addWidget(self.project_view)
         explorer_view.addWidget(QTextEdit())
-        explorer_view.setSizes([100, 100])
+        explorer_view.setSizes([620, 280])
 
         # 创建一个 QSplitter
         splitter = QSplitter(Qt.Horizontal)
         splitter.addWidget(explorer_view)
         splitter.addWidget(content_view)
-        splitter.setSizes([230, 570])
+        splitter.setSizes([400, 1500])
 
         # 设置主窗口的中央部件为 QSplitter
         self.setCentralWidget(splitter)

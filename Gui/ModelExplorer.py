@@ -49,7 +49,7 @@ class AutosarView(QWidget):
         layout.addWidget(self.treeview)
 
         self.treeview.setHeaderLabels(["Ar Model", "Ar path"])
-        self.treeview.setColumnWidth(0, 200)
+        self.treeview.setColumnWidth(0, 260)
         # 添加根节点
         self.treeview.root_item = QTreeWidgetItem(self.treeview, ["AUTOSAR"])
         # 设置根节点Icon
