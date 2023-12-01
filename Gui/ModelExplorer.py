@@ -12,7 +12,7 @@ class ModelExplorer:
         self.view = AutosarView()
 
         # 解析arxml数据
-        AutosarData(path, self.view)
+        self.ardata = AutosarData(path, self.view)
 
 class AutosarView(QWidget):
     def __init__(self):
@@ -215,11 +215,11 @@ class AutosarData:
 
         self.arxml_files = []
         self.arxml_files = self.find_files_recursive(workspace, "arxml")
-        ws = autosar.workspace()
+        self.ws = autosar.workspace()
         for arxml in self.arxml_files:
-            ws.loadXML(arxml)
-        for pack in ws.listPackages():
-            for pack1 in ws.findall(pack):
+            self.ws.loadXML(arxml)
+        for pack in self.ws.listPackages():
+            for pack1 in self.ws.findall(pack):
                 self.package_parser(pack1, view)
 
     def package_parser(self, package, view):

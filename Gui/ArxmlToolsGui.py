@@ -11,6 +11,8 @@ class MyMainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
 
+        self.project_view_model_explorer = None
+
         self.setGeometry(100, 100, 800, 600)
 
         # 设置主窗口属性
@@ -80,11 +82,12 @@ class MyMainWindow(QMainWindow):
         print(folder_path)
         self.draw_model_explorer(folder_path)
         self.draw_file_explorer(folder_path)
+        self.itview.get_armodel(self.project_view_model_explorer.ardata.ws)
 
     def draw_model_explorer(self, path):
-        project_view_model_explorer = ModelExplorer(path)
-        project_view_model_explorer.view.treeview.itemClicked.connect(self.itview.show_details)
-        self.project_view.addTab(project_view_model_explorer.view, "Model Explorer")
+        self.project_view_model_explorer = ModelExplorer(path)
+        self.project_view_model_explorer.view.treeview.itemClicked.connect(self.itview.show_details)
+        self.project_view.addTab(self.project_view_model_explorer.view, "Model Explorer")
         pass
 
     def draw_file_explorer(self, path):
