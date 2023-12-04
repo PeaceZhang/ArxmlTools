@@ -1,55 +1,62 @@
-from PySide6.QtWidgets import QApplication, QMainWindow, QTabWidget, QWidget, QVBoxLayout
-import sys
-
-class MyMainWindow(QMainWindow):
+from PySide6.QtWidgets import QApplication, QTreeWidget, QTreeWidgetItem, QMenu, QDialog, QVBoxLayout, QLabel
+from PySide6.QtGui import QAction
+class CustomTreeWidget(QTreeWidget):
     def __init__(self):
         super().__init__()
 
-        # 创建标签页窗口
-        tab_widget = QTabWidget(self)
-        self.setCentralWidget(tab_widget)
+        # 初始化UI
+        self.initUI()
 
-        # 创建两个标签页
-        tab1 = QWidget()
-        tab2 = QWidget()
+    def initUI(self):
+        # 填充QTreeWidget的数据
+        self.populateTree()
 
-        # 将标签页添加到标签控件
-        tab_widget.addTab(tab1, "Tab 1")
-        tab_widget.addTab(tab2, "Tab 2")
+        # 连接customContextMenuRequested信号到槽函数
+        self.customContextMenuRequested.connect(self.showContextMenu)
 
-        # 设置标签页样式
-        # tab_widget.setStyleSheet("""
-        #     QTabWidget::pane { /* 整体样式 */
-        #         border: 2px solid #C0C0C0;
-        #         background-color: #F0F0F0;
-        #     }
-        #
-        #     QTabBar::tab { /* 单个标签的样式 */
-        #         background-color: #D0D0D0;
-        #         border: 1px solid #C0C0C0;
-        #         border-bottom-color: #A0A0A0;
-        #         min-width: 8ex;
-        #         padding: 3px;
-        #     }
-        #
-        #     QTabBar::tab:selected { /* 选中的标签样式 */
-        #         background-color: #E0E0E0;
-        #     }
-        #
-        #     QTabBar::tab:!selected { /* 未选中的标签样式 */
-        #         margin-top: 2px; /* 上边距 */
-        #     }
-        # """)
+    def populateTree(self):
+        # 这里添加QTreeWidget的数据
+        # 示例数据
+        parent = QTreeWidgetItem(self)
+        parent.setText(0, "Parent Item")
 
-def main():
-    app = QApplication(sys.argv)
+        child1 = QTreeWidgetItem(parent)
+        child1.setText(0, "Child 1")
 
-    # 创建主窗口对象
-    my_window = MyMainWindow()
-    my_window.show()
+        child2 = QTreeWidgetItem(parent)
+        child2.setText(0, "Child 2")
 
-    # 运行应用程序
-    sys.exit(app.exec_())
+    def showContextMenu(self, pos):
+        # 获取当前点击的项目
+        item = self.itemAt(pos)
 
-if __name__ == "__main__":
-    main()
+        # 创建右键菜单
+        contextMenu = QMenu(self)
+
+        # 添加菜单项
+        if item is not None:
+            action1 = QAction(f"Open Popup for {item.text(0)}", self)
+            action1.triggered.connect(lambda: self.openPopup(item.text(0)))
+            contextMenu.addAction(action1)
+
+        # 显示菜单
+        contextMenu.exec_(self.mapToGlobal(pos))
+
+    def openPopup(self, itemName):
+        # 创建弹出窗口
+        popup = QDialog(self)
+        popup.setWindowTitle(f"Popup for {itemName}")
+
+        # 在弹出窗口中添加一些内容
+        layout = QVBoxLayout(popup)
+        label = QLabel(f"This is a popup for {itemName}")
+        layout.addWidget(label)
+
+        # 显示弹出窗口
+        popup.exec_()
+
+if __name__ == '__main__':
+    app = QApplication([])
+    window = CustomTreeWidget()
+    window.show()
+    app.exec_()

@@ -1,6 +1,7 @@
-from PySide6.QtWidgets import QWidget, QTreeWidget, QTreeWidgetItem, QToolBar, QVBoxLayout, QSizePolicy
+from PySide6.QtWidgets import (QWidget, QTreeWidget, QTreeWidgetItem, QToolBar, QVBoxLayout, QSizePolicy, QMenu, QDialog, \
+                               QLabel, QDialogButtonBox, QFrame)
 from PySide6.QtGui import QIcon, QFont, QAction
-from PySide6.QtCore import Qt
+from PySide6.QtCore import Qt, QPoint
 from ItemsView import ItemsView
 import autosar
 import glob
@@ -65,6 +66,9 @@ class AutosarView(QWidget):
         self.add_Compositions_folder()
         self.add_Infrastruture_folder()
 
+        self.treeview.setContextMenuPolicy(Qt.CustomContextMenu)
+        self.treeview.customContextMenuRequested.connect(self.showContextMenu)
+
         self.treeview.datatypes_basetypes_folder = None
         self.treeview.datatypes_implementation_folder = None
         self.treeview.Infrastruture_compumethod_folder = None
@@ -72,6 +76,74 @@ class AutosarView(QWidget):
         self.treeview.Infrastruture_Unit_folder = None
         self.treeview.Interfaces_SRIterface_folder = None
         self.treeview.Interfaces_CSIterface_folder = None
+
+    def showContextMenu(self, pos):
+        item = self.treeview.itemAt(pos)
+        print(item.text(0))
+
+        contextMenu = QMenu(self.treeview)
+
+        if "Base Types" == item.text(0):
+            # 添加菜单项
+            action1 = QAction("New Base Type...", self.treeview)
+            action1.setIcon(QIcon("Icon/basetype.png"))
+            action1.triggered.connect(self.openPopup)
+            contextMenu.addAction(action1)
+
+            action2 = QAction("Select All", self.treeview)
+            # action2.triggered.connect(self.handleAction2)
+            action2.setIcon(QIcon("Icon/basetype.png"))
+            contextMenu.addAction(action2)
+        else:
+            # 添加菜单项
+            action1 = QAction("Action 1", self.treeview)
+            # action1.triggered.connect(self.handleAction1)
+            contextMenu.addAction(action1)
+
+            action2 = QAction("Action 2", self.treeview)
+            # action2.triggered.connect(self.handleAction2)
+            contextMenu.addAction(action2)
+        # 显示菜单
+        contextMenu.exec(self.treeview.mapToGlobal(pos))
+    def openPopup(self, itemName):
+        # 创建弹出窗口
+        popup = QDialog(self)
+        popup.setWindowTitle(f"Popup for {itemName}")
+
+        # 在弹出窗口中添加一些内容
+        layout = QVBoxLayout(popup)
+
+        # 创建灰色线框
+        # 创建灰色矩形框
+        frame = QFrame(popup)
+        frame.setStyleSheet("QFrame { background-color: gray; border: 1px solid black; }")
+
+        # 在灰色线框中添加标签
+        label = QLabel(f"This is a popup for {itemName}")
+        frame_layout = QVBoxLayout(frame)
+        frame_layout.addWidget(label)
+
+        layout.addWidget(frame)
+
+        # 创建按钮框
+        buttons = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel | QDialogButtonBox.Apply)
+        buttons.accepted.connect(popup.accept)
+        buttons.rejected.connect(popup.reject)
+        buttons.clicked.connect(lambda button: self.handleButtonClick(button, itemName))
+
+        # 将按钮框添加到布局中
+        layout.addWidget(buttons)
+
+        # 显示弹出窗口
+        result = popup.exec_()
+        if result == QDialog.Accepted:
+            print(f"OK button clicked for {itemName}")
+        elif result == QDialog.Rejected:
+            print(f"Cancel button clicked for {itemName}")
+
+    def handleButtonClick(self, button, itemName):
+        if button.text() == "Apply":
+            print(f"Apply button clicked for {itemName}")
 
     def expand_treeview_allitems(self):
         self.treeview.expandAll()
