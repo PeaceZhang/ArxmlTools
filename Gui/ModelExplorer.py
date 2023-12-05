@@ -113,23 +113,38 @@ class AutosarView(QWidget):
         # 在弹出窗口中添加一些内容
         layout = QVBoxLayout(popup)
 
-        GroupBox = QGroupBox(popup)
-        GroupBox.setTitle("Category")
-        # GroupBox.setFixedSize(400, 100)
-
         MemAlignment_lineeditor = QLineEdit()
-        MemAlignment_lineeditor.setText("NONE")
+        MemAlignment_lineeditor.setReadOnly(True)
+        MemAlignment_lineeditor.setStyleSheet("QLineEdit { color: gray; background-color: lightgray; border: 1px solid darkgray; }")
+
+        MaxBaseTypeSize_LineEdit = QLineEdit()
+        MaxBaseTypeSize_LineEdit.setReadOnly(True)
+        MaxBaseTypeSize_LineEdit.setStyleSheet("QLineEdit { color: gray; background-color: lightgray; border: 1px solid darkgray; }")
+
+        BaseTypeEncoding_LineEdit = QLineEdit()
+        BaseTypeEncoding_LineEdit.setText("NONE")
+
+        ByteOrder_LineEdit = QLineEdit()
+        ByteOrder_LineEdit.setReadOnly(True)
+        ByteOrder_LineEdit.setStyleSheet("QLineEdit { color: gray; background-color: lightgray; border: 1px solid darkgray; }")
 
         BaseTypeDefinition_Layout = QFormLayout()
         BaseTypeDefinition_Layout.addRow(QLabel("BaseTypeSize"), QLineEdit())
-        BaseTypeDefinition_Layout.addRow(QLabel("MaxBaseTypeSize"), QLineEdit().setReadOnly(True))
-        BaseTypeDefinition_Layout.addRow(QLabel("BaseTypeEncoding"), QLineEdit())
+        BaseTypeDefinition_Layout.addRow(QLabel("MaxBaseTypeSize"), MaxBaseTypeSize_LineEdit)
+        BaseTypeDefinition_Layout.addRow(QLabel("BaseTypeEncoding"), BaseTypeEncoding_LineEdit)
         BaseTypeDefinition_Layout.addRow(QLabel("MemAlignment"), MemAlignment_lineeditor)
-        BaseTypeDefinition_Layout.addRow(QLabel("ByteOrder"), QLineEdit())
+        BaseTypeDefinition_Layout.addRow(QLabel("ByteOrder"), ByteOrder_LineEdit)
         BaseTypeDefinition_Layout.addRow(QLabel("NativeDeclaration"), QLineEdit())
+
+        line = QFrame(self)
+        line.setFrameShape(QFrame.HLine)
+        line.setFrameShadow(QFrame.Sunken)
 
         GroupBox1 = QGroupBox(popup)
         GroupBox1.setTitle("BaseTypeDefinition")
+        # title = GroupBox1.titleLabel()
+        print(GroupBox1.title())
+        # title.setStyleSheet("font-weight: bold;")
         GroupBox1.resize(100, 50)
         GroupBox1.setLayout(BaseTypeDefinition_Layout)
 
@@ -140,7 +155,7 @@ class AutosarView(QWidget):
         name_layout.addWidget(name_LineEdit)
 
         layout.addLayout(name_layout)
-        layout.addWidget(GroupBox)
+        layout.addWidget(line)
         layout.addWidget(GroupBox1)
 
         # 创建按钮框
