@@ -1,5 +1,5 @@
 from PySide6.QtWidgets import (QWidget, QTreeWidget, QTreeWidgetItem, QToolBar, QVBoxLayout, QSizePolicy, QMenu, QDialog, \
-                               QLabel, QDialogButtonBox, QFrame, QGroupBox)
+                               QLabel, QDialogButtonBox, QFrame, QGroupBox, QLineEdit, QHBoxLayout, QFormLayout)
 from PySide6.QtGui import QIcon, QFont, QAction
 from PySide6.QtCore import Qt, QPoint
 from ItemsView import ItemsView
@@ -108,19 +108,40 @@ class AutosarView(QWidget):
     def openPopup(self, itemName):
         # 创建弹出窗口
         popup = QDialog(self)
-        popup.setWindowTitle(f"Popup for {itemName}")
-        popup.resize(200,200)
+        popup.setWindowTitle(f"New Base Type")
+        popup.resize(400, 500)
         # 在弹出窗口中添加一些内容
         layout = QVBoxLayout(popup)
 
-        # 创建灰色线框
-        # 创建灰色矩形框
         GroupBox = QGroupBox(popup)
-        GroupBox.setTitle("ars")
-        GroupBox.resize(100, 50)
-        print(GroupBox.size())
+        GroupBox.setTitle("Category")
+        # GroupBox.setFixedSize(400, 100)
 
+        MemAlignment_lineeditor = QLineEdit()
+        MemAlignment_lineeditor.setText("NONE")
+
+        BaseTypeDefinition_Layout = QFormLayout()
+        BaseTypeDefinition_Layout.addRow(QLabel("BaseTypeSize"), QLineEdit())
+        BaseTypeDefinition_Layout.addRow(QLabel("MaxBaseTypeSize"), QLineEdit().setReadOnly(True))
+        BaseTypeDefinition_Layout.addRow(QLabel("BaseTypeEncoding"), QLineEdit())
+        BaseTypeDefinition_Layout.addRow(QLabel("MemAlignment"), MemAlignment_lineeditor)
+        BaseTypeDefinition_Layout.addRow(QLabel("ByteOrder"), QLineEdit())
+        BaseTypeDefinition_Layout.addRow(QLabel("NativeDeclaration"), QLineEdit())
+
+        GroupBox1 = QGroupBox(popup)
+        GroupBox1.setTitle("BaseTypeDefinition")
+        GroupBox1.resize(100, 50)
+        GroupBox1.setLayout(BaseTypeDefinition_Layout)
+
+        name_layout = QHBoxLayout(self)
+        name_header = QLabel("Name:")
+        name_LineEdit = QLineEdit(self)
+        name_layout.addWidget(name_header)
+        name_layout.addWidget(name_LineEdit)
+
+        layout.addLayout(name_layout)
         layout.addWidget(GroupBox)
+        layout.addWidget(GroupBox1)
 
         # 创建按钮框
         buttons = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel | QDialogButtonBox.Apply)
