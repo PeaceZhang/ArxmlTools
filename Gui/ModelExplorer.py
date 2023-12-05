@@ -1,5 +1,5 @@
 from PySide6.QtWidgets import (QWidget, QTreeWidget, QTreeWidgetItem, QToolBar, QVBoxLayout, QSizePolicy, QMenu, QDialog, \
-                               QLabel, QDialogButtonBox, QFrame)
+                               QLabel, QDialogButtonBox, QFrame, QGroupBox)
 from PySide6.QtGui import QIcon, QFont, QAction
 from PySide6.QtCore import Qt, QPoint
 from ItemsView import ItemsView
@@ -109,21 +109,18 @@ class AutosarView(QWidget):
         # 创建弹出窗口
         popup = QDialog(self)
         popup.setWindowTitle(f"Popup for {itemName}")
-
+        popup.resize(200,200)
         # 在弹出窗口中添加一些内容
         layout = QVBoxLayout(popup)
 
         # 创建灰色线框
         # 创建灰色矩形框
-        frame = QFrame(popup)
-        frame.setStyleSheet("QFrame { background-color: gray; border: 1px solid black; }")
+        GroupBox = QGroupBox(popup)
+        GroupBox.setTitle("ars")
+        GroupBox.resize(100, 50)
+        print(GroupBox.size())
 
-        # 在灰色线框中添加标签
-        label = QLabel(f"This is a popup for {itemName}")
-        frame_layout = QVBoxLayout(frame)
-        frame_layout.addWidget(label)
-
-        layout.addWidget(frame)
+        layout.addWidget(GroupBox)
 
         # 创建按钮框
         buttons = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel | QDialogButtonBox.Apply)
