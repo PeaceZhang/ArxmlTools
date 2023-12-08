@@ -1,5 +1,5 @@
 from PySide6.QtWidgets import (QWidget, QTreeWidget, QTreeWidgetItem, QToolBar, QVBoxLayout, QSizePolicy, QMenu, QDialog, \
-                               QLabel, QDialogButtonBox, QFrame, QGroupBox, QLineEdit, QHBoxLayout, QFormLayout)
+                               QLabel, QDialogButtonBox, QFrame, QGroupBox, QLineEdit, QHBoxLayout, QFormLayout, QComboBox)
 from PySide6.QtGui import QIcon, QFont, QAction
 from PySide6.QtCore import Qt, QPoint
 from ItemsView import ItemsView
@@ -87,7 +87,7 @@ class AutosarView(QWidget):
             # 添加菜单项
             action1 = QAction("New Base Type...", self.treeview)
             action1.setIcon(QIcon("Icon/basetype.png"))
-            action1.triggered.connect(self.openPopup)
+            # action1.triggered.connect(self.openPopup)
             contextMenu.addAction(action1)
 
             action2 = QAction("Select All", self.treeview)
@@ -105,78 +105,6 @@ class AutosarView(QWidget):
             contextMenu.addAction(action2)
         # 显示菜单
         contextMenu.exec(self.treeview.mapToGlobal(pos))
-    def openPopup(self, itemName):
-        # 创建弹出窗口
-        popup = QDialog(self)
-        popup.setWindowTitle(f"New Base Type")
-        popup.resize(400, 500)
-        # 在弹出窗口中添加一些内容
-        layout = QVBoxLayout(popup)
-
-        MemAlignment_lineeditor = QLineEdit()
-        MemAlignment_lineeditor.setReadOnly(True)
-        MemAlignment_lineeditor.setStyleSheet("QLineEdit { color: gray; background-color: lightgray; border: 1px solid darkgray; }")
-
-        MaxBaseTypeSize_LineEdit = QLineEdit()
-        MaxBaseTypeSize_LineEdit.setReadOnly(True)
-        MaxBaseTypeSize_LineEdit.setStyleSheet("QLineEdit { color: gray; background-color: lightgray; border: 1px solid darkgray; }")
-
-        BaseTypeEncoding_LineEdit = QLineEdit()
-        BaseTypeEncoding_LineEdit.setText("NONE")
-
-        ByteOrder_LineEdit = QLineEdit()
-        ByteOrder_LineEdit.setReadOnly(True)
-        ByteOrder_LineEdit.setStyleSheet("QLineEdit { color: gray; background-color: lightgray; border: 1px solid darkgray; }")
-
-        BaseTypeDefinition_Layout = QFormLayout()
-        BaseTypeDefinition_Layout.addRow(QLabel("BaseTypeSize"), QLineEdit())
-        BaseTypeDefinition_Layout.addRow(QLabel("MaxBaseTypeSize"), MaxBaseTypeSize_LineEdit)
-        BaseTypeDefinition_Layout.addRow(QLabel("BaseTypeEncoding"), BaseTypeEncoding_LineEdit)
-        BaseTypeDefinition_Layout.addRow(QLabel("MemAlignment"), MemAlignment_lineeditor)
-        BaseTypeDefinition_Layout.addRow(QLabel("ByteOrder"), ByteOrder_LineEdit)
-        BaseTypeDefinition_Layout.addRow(QLabel("NativeDeclaration"), QLineEdit())
-
-        line = QFrame(self)
-        line.setFrameShape(QFrame.HLine)
-        line.setFrameShadow(QFrame.Sunken)
-
-        GroupBox1 = QGroupBox(popup)
-        GroupBox1.setTitle("BaseTypeDefinition")
-        # title = GroupBox1.titleLabel()
-        print(GroupBox1.title())
-        # title.setStyleSheet("font-weight: bold;")
-        GroupBox1.resize(100, 50)
-        GroupBox1.setLayout(BaseTypeDefinition_Layout)
-
-        name_layout = QHBoxLayout(self)
-        name_header = QLabel("Name:")
-        name_LineEdit = QLineEdit(self)
-        name_layout.addWidget(name_header)
-        name_layout.addWidget(name_LineEdit)
-
-        layout.addLayout(name_layout)
-        layout.addWidget(line)
-        layout.addWidget(GroupBox1)
-
-        # 创建按钮框
-        buttons = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel | QDialogButtonBox.Apply)
-        buttons.accepted.connect(popup.accept)
-        buttons.rejected.connect(popup.reject)
-        buttons.clicked.connect(lambda button: self.handleButtonClick(button, itemName))
-
-        # 将按钮框添加到布局中
-        layout.addWidget(buttons)
-
-        # 显示弹出窗口
-        result = popup.exec_()
-        if result == QDialog.Accepted:
-            print(f"OK button clicked for {itemName}")
-        elif result == QDialog.Rejected:
-            print(f"Cancel button clicked for {itemName}")
-
-    def handleButtonClick(self, button, itemName):
-        if button.text() == "Apply":
-            print(f"Apply button clicked for {itemName}")
 
     def expand_treeview_allitems(self):
         self.treeview.expandAll()
