@@ -1,6 +1,5 @@
 # ArxmlTools
-Autosar application arhitecture design toolset
-it has CLI mode and GUI mode,
+Autosar application arhitecture design toolset, it has CLI mode and GUI mode,
 
 ## CLI Mode
 ### step1: open asw architecture items database, Import/Application.xlsx
@@ -12,7 +11,7 @@ it has CLI mode and GUI mode,
 now this database support datatypes, interfaces, components
 1. datatypes: basetype, alias type, enumeration, structure
 2. portinterfaces: R/S Interfaces, C/S Interfaces
-3. components: atomic components, conposition composition, assembly connections, daligation connections
+3. components: atomic components, composition components, assembly connections, daligation connections
 
 ### step3: run scripts
 ```bash
