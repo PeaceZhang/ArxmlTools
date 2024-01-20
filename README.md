@@ -10,9 +10,9 @@ it has CLI mode and GUI mode,
 ![image](https://github.com/PeaceZhang/ArxmlTools/assets/31465472/f5b30e7a-50d6-426f-aa98-12a5b12243a4)
 
 now this database support datatypes, interfaces, components
-datatypes: basetype, alias type, enumeration, structure
-portinterfaces: R/S Interfaces, C/S Interfaces
-components: atomic components, conposition composition, assembly connections, daligation connections
+1. datatypes: basetype, alias type, enumeration, structure
+2. portinterfaces: R/S Interfaces, C/S Interfaces
+3. components: atomic components, conposition composition, assembly connections, daligation connections
 
 ### step3: run scripts
 ```bash
